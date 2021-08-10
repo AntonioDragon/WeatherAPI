@@ -1,12 +1,23 @@
 import React, {useContext, useState} from 'react'
 import ContextApp from '../Context/ContextApp'
 import OtherLogin from './OtherLogin'
+import {format, formatDistanceToNowStrict} from 'date-fns'
+
+const usePull = () =>{
+  const {persons} = useContext(ContextApp)
+  return persons
+}
 
 const UserCardOther = (props) => {
+  const pullPersons = usePull()
   const [OpenOther, setOpenOther] = useState(false)
-  const {persons} = useContext(ContextApp)
 
   const OpenAccordion = () => setOpenOther(!OpenOther)
+  const dateFormater = () =>
+    format(new Date(pullPersons.registered.date), 'dd/MM/yyyy')
+  const yearFormaterStric = () => formatDistanceToNowStrict(
+      new Date(pullPersons.registered.date), 'year')
+
 
   return (
     <div className='card__other other'>
@@ -17,17 +28,17 @@ const UserCardOther = (props) => {
             <img
               className='label__img'
               srcSet='../static/icon/CloseAccordion.png'
-            ></img>
+            />
           </label>
-          <p className='other__registered text'>{`Year: ${
-            persons.registered.age
-          } Registration date: ${new Date(
-              persons.registered.date
-          ).toLocaleDateString()}`}</p>
+          <p className='other__registered text'>
+            {`Year: ${yearFormaterStric()} 
+            Registration date: ${dateFormater()}`}</p>
           <p className='other__id text'>
-            {persons.id.name === '' && persons.id.value === null
-              ? 'Missing id info'
-              : `Name: ${persons.id.name} Id value: ${persons.id.value}`}
+            {pullPersons.id.name === '' &&
+            pullPersons.id.value === null ?
+            'Missing id info' :
+            `Name: ${pullPersons.id.name} 
+            Id value: ${pullPersons.id.value}`}
           </p>
           <OtherLogin />
         </>
@@ -37,7 +48,7 @@ const UserCardOther = (props) => {
           <img
             className='label__img'
             srcSet='../static/icon/OpenAccordion.png'
-          ></img>
+          />
         </label>
       )}
     </div>

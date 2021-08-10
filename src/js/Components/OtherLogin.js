@@ -1,9 +1,14 @@
 import React, {useContext, useState} from 'react'
 import ContextApp from '../Context/ContextApp'
 
+const usePull = () =>{
+  const {persons} = useContext(ContextApp)
+  return persons
+}
+
 const OtherLogin = (props) => {
   const [OpenLogin, setOpenLogin] = useState(false)
-  const {persons} = useContext(ContextApp)
+  const pullPersons = usePull()
 
   const OpenAccordion = () => setOpenLogin(!OpenLogin)
 
@@ -16,22 +21,28 @@ const OtherLogin = (props) => {
             <img
               className='label__img'
               srcSet='../static/icon/CloseAccordion.png'
-            ></img>
+            />
           </label>
-          <p className='login__username text--muted'>
-            {`Username: ${persons.login.username}`}</p>
-          <p className='login__password text--muted'>
-            {`Password: ${persons.login.password}`}</p>
-          <p className='login__md5 text--muted'>
-            {`md5: ${persons.login.md5}`}</p>
-          <p className='login__salt text--muted'>
-            {`salt: ${persons.login.salt}`}</p>
-          <p className='login__sha1 text--muted'>
-            {`sha1: ${persons.login.sha1}`}</p>
-          <p className='login__sha256 text--muted'>
-            {`sha256: ${persons.login.sha256}`}</p>
-          <p className='login__uuid text--muted'>
-            {`uuid: ${persons.login.uuid}`}</p>
+          {
+            pullPersons.login ?
+            <>
+              <p className='login__username text--muted'>
+                {`Username: ${pullPersons.login.username}`}</p>
+              <p className='login__password text--muted'>
+                {`Password: ${pullPersons.login.password}`}</p>
+              <p className='login__md5 text--muted'>
+                {`md5: ${pullPersons.login.md5}`}</p>
+              <p className='login__salt text--muted'>
+                {`salt: ${pullPersons.login.salt}`}</p>
+              <p className='login__sha1 text--muted'>
+                {`sha1: ${pullPersons.login.sha1}`}</p>
+              <p className='login__sha256 text--muted'>
+                {`sha256: ${pullPersons.login.sha256}`}</p>
+              <p className='login__uuid text--muted'>
+                {`uuid: ${pullPersons.login.uuid}`}</p>
+            </> :
+            'Missing info'
+          }
         </>
       ) : (
         <label onClick={OpenAccordion} className='label'>
@@ -39,7 +50,7 @@ const OtherLogin = (props) => {
           <img
             className='label__img'
             srcSet='../static/icon/OpenAccordion.png'
-          ></img>
+          />
         </label>
       )}
     </div>

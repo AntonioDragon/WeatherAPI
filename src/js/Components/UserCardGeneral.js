@@ -2,9 +2,14 @@ import React, {useContext, useState} from 'react'
 import ContextApp from '../Context/ContextApp'
 import GeneralLocation from './GeneralLocation'
 
+const usePull = () =>{
+  const {persons} = useContext(ContextApp)
+  return persons
+}
+
 const UserCardGeneral = (props) => {
   const [OpenGeneral, setOpenGeneral] = useState(false)
-  const {persons} = useContext(ContextApp)
+  const pullPersons = usePull()
 
   const OpenAccordion = () => setOpenGeneral(!OpenGeneral)
 
@@ -17,14 +22,29 @@ const UserCardGeneral = (props) => {
             <img
               className='label__img'
               srcSet='../static/icon/CloseAccordion.png'
-            ></img>
+            />
           </label>
           <p className='info__email text'>
-            {`Email: ${persons.email}`}</p>
+            {
+              pullPersons.email ?
+              `Email: ${pullPersons.email}` :
+              'Missing info'
+            }
+          </p>
           <p className='info__phone-home text'>
-            {`Home phone: ${persons.cell}`}</p>
+            {
+              pullPersons.cell ?
+              `Home phone: ${pullPersons.cell}` :
+              'Missing info'
+            }
+          </p>
           <p className='info__phone text'>
-            {`Phone: ${persons.phone}`}</p>
+            {
+              pullPersons.phone ?
+              `Phone: ${pullPersons.phone}` :
+              'Missing info'
+            }
+          </p>
           <GeneralLocation />
         </>
       ) : (
@@ -33,7 +53,7 @@ const UserCardGeneral = (props) => {
           <img
             className='label__img'
             srcSet='../static/icon/OpenAccordion.png'
-          ></img>
+          />
         </label>
       )}
     </div>
