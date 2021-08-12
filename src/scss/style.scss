@@ -107,6 +107,29 @@
         width: 200px;
     }
 
+    &__loader {
+        grid-area: 1 / 4 / 2 / 5;
+        margin-top: 28px;
+        margin-left: 65px;
+        &--customize{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: conic-gradient(rgb(6, 108, 158), transparent);
+            animation: rotating 1s linear infinite;
+        }
+        &--customize::after{
+            display: inline-block;
+            content: '';
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+        }
+    }
     &__card {
         grid-area: 2 / 2 / 6 / 5;
     }
@@ -119,6 +142,26 @@
         grid-area: 2 / 2 / 6 / 5;
         font-size: 30px;
         text-align: center;
+    }
+}
+
+
+
+@-webkit-keyframes rotating {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes rotating{
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
     }
 }
 

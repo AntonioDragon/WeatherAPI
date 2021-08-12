@@ -1,21 +1,17 @@
 import axios from 'axios'
-import {trackPromise} from 'react-promise-tracker'
 
-const componentDidMount = (setPersons, setError) => {
-  trackPromise(
-      axios({
-        url: 'https://randomuser.me/api/',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+const userApiPull = () =>
+  axios({
+    url: 'https://randomuser.me/api/',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+      .then((response) => {
+        return response.data.results[0]
       })
-          .then((response) => {
-            setPersons(response.data.results[0])
-          })
-          .catch((e) => {
-            setError(e)
-          }),
-  )
-}
+      .catch((e) => {
+        return e
+      })
 
-export default componentDidMount
+export default userApiPull

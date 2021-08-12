@@ -20,37 +20,43 @@ const UserCardGeneral = (props) => {
           <label onClick={OpenAccordion} className='label'>
             <p className='label__door text--label'>General info</p>
             <img
+              alt='Image checked'
               className='label__img'
               srcSet='../static/icon/CloseAccordion.png'
             />
           </label>
-          <p className='info__email text'>
-            {
-              pullPersons.email ?
-              `Email: ${pullPersons.email}` :
-              'Missing info'
-            }
-          </p>
-          <p className='info__phone-home text'>
-            {
-              pullPersons.cell ?
-              `Home phone: ${pullPersons.cell}` :
-              'Missing info'
-            }
-          </p>
-          <p className='info__phone text'>
-            {
-              pullPersons.phone ?
-              `Phone: ${pullPersons.phone}` :
-              'Missing info'
-            }
-          </p>
+          {
+            pullPersons.email ?
+            <p className='info__email text'>
+              Email:{pullPersons.email}
+            </p> : <p className='info__email text text--muted'>
+              Missing info email
+            </p>
+          }
+          {
+            pullPersons.cell ?
+            <p className='info__phone-home text'>
+              Home phone:{pullPersons.cell}
+            </p> : <p className='info__phone-home text text--muted'>
+              Missing info cell
+            </p>
+          }
+
+          {
+            pullPersons.phone ?
+            <p className='info__phone text'>
+              Phone: {pullPersons.phone}
+            </p> : <p className='info__phone text text--muted'>
+              Missing info phone
+            </p>
+          }
           <GeneralLocation />
         </>
       ) : (
         <label onClick={OpenAccordion} className='label'>
           <p className='label__door text--label'>General info</p>
           <img
+            alt='Image checked'
             className='label__img'
             srcSet='../static/icon/OpenAccordion.png'
           />

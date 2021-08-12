@@ -13,12 +13,10 @@ const App = () => {
   const [error, setError] = useState()
 
   return (
-    <ContextApp.Provider value={{persons}}>
+    <ContextApp.Provider value={{persons, setPersons, setError}}>
       <div className='output'>
         <h1 className='output__title text--title'>UserAPI</h1>
         <LoadingTracker
-          setPersons={setPersons}
-          setError={setError}
         />
         {
           error ?
