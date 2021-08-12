@@ -3,14 +3,14 @@ import usePull from '../Helpers/usePullContext'
 
 
 const UserCardImg = (props) => {
-  const pullPersons = usePull()
+  const pullPersons = usePull().persons
 
   return (
     <div className='card__img'>
       {
-        (pullPersons.persons.picture &&
-         pullPersons.persons.picture.large) &&
-        <img src={pullPersons.persons.picture.large} alt='Image User'/>
+        (pullPersons.picture &&
+         pullPersons.picture.large) &&
+        <img src={pullPersons.picture.large} alt='Image User'/>
       }
     </div>
   )

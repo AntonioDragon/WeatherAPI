@@ -1,14 +1,9 @@
-import React, {useContext, useMemo} from 'react'
-import ContextApp from '../Context/ContextApp'
+import React, {useMemo} from 'react'
+import usePull from '../Helpers/usePullContext'
 import {dateFormater, yearFormaterStric} from '../Helpers/formatersDate'
 
-const usePull = () =>{
-  const {persons} = useContext(ContextApp)
-  return persons
-}
-
 const UserCardInfo = () => {
-  const pullPersons = usePull()
+  const pullPersons = usePull().persons
 
   const memoizedFormater = useMemo(() =>
     dateFormater(pullPersons.dob.date), [pullPersons.dob.date])

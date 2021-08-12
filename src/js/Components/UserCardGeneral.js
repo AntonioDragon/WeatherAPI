@@ -1,15 +1,11 @@
-import React, {useContext, useState} from 'react'
-import ContextApp from '../Context/ContextApp'
+import React, {useState} from 'react'
+import usePull from '../Helpers/usePullContext'
 import GeneralLocation from './GeneralLocation'
 
-const usePull = () =>{
-  const {persons} = useContext(ContextApp)
-  return persons
-}
 
 const UserCardGeneral = (props) => {
   const [OpenGeneral, setOpenGeneral] = useState(false)
-  const pullPersons = usePull()
+  const pullPersons = usePull().persons
 
   const OpenAccordion = () => setOpenGeneral(!OpenGeneral)
 
