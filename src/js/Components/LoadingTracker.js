@@ -1,5 +1,4 @@
 import React, {useCallback, useState} from 'react'
-import PropTypes from 'prop-types'
 import userApiPull from '../Helpers/axiosUsersAPI'
 import usePull from '../Helpers/usePullContext'
 
@@ -35,11 +34,6 @@ const LoadingTracker = () => {
       }
     </>
   )
-}
-
-LoadingTracker.propTypes ={
-  setPersons: PropTypes.func,
-  setError: PropTypes.func,
 }
 
 export default LoadingTracker
