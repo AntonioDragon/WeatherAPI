@@ -11,7 +11,6 @@ import LoadingTracker from './Components/LoadingTracker'
 const App = () => {
   const [persons, setPersons] = useState()
   const [error, setError] = useState()
-
   return (
     <ContextApp.Provider value={{persons, setPersons, setError}}>
       <div className='output'>

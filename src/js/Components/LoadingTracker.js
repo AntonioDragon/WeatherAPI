@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react'
 import userApiPull from '../Helpers/axiosUsersAPI'
 import usePull from '../Helpers/usePullContext'
+import validUserAPI from '../Helpers/validUserApi'
 
 const LoadingTracker = () => {
   const setStatePull = usePull()
@@ -10,12 +11,15 @@ const LoadingTracker = () => {
       () => {
         setApiPull(true)
         userApiPull().then((value) => {
+          validUserAPI(value)
           setStatePull.setPersons(value)
           setApiPull(false)
         }).catch((value) => {
           setStatePull.setError(value)
+          setApiPull(false)
         })
       },
+      [setApiPull, setStatePull],
   )
 
   return (

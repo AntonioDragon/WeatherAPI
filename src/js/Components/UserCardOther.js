@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react'
+import React, {useCallback, useMemo, useState} from 'react'
 import OtherLogin from './OtherLogin'
 import usePull from '../Helpers/usePullContext'
 import {dateFormater, yearFormaterStric} from '../Helpers/formatersDate'
@@ -8,7 +8,8 @@ const UserCardOther = (props) => {
   const pullPersons = usePull().persons
   const [OpenOther, setOpenOther] = useState(false)
 
-  const OpenAccordion = () => setOpenOther(!OpenOther)
+  const OpenAccordion = useCallback(
+      () => setOpenOther(!OpenOther), [setOpenOther, OpenOther])
 
   const memoizedFormater = useMemo(() =>
     dateFormater(pullPersons.registered.date), [pullPersons.registered.date])
@@ -29,30 +30,19 @@ const UserCardOther = (props) => {
               srcSet='../static/icon/CloseAccordion.png'
             />
           </label>
-          {
-            (pullPersons.id &&
-             pullPersons.id.name &&
-             pullPersons.id.value) ?
-              <p className='other__id text'>
-                {pullPersons.id.name === '' &&
-                pullPersons.id.value === null ?
-                'Missing id info' :
-                `Name: ${pullPersons.id.name} 
-                Id value: ${pullPersons.id.value}`}
-              </p> : <p className='other__id text text--muted'>
-                Missing id info
-              </p>
-          }
-          {
-            (pullPersons.registered &&
-             pullPersons.registered.date) &&
-              <p className='other__registered text'>
-                {
-                  `Year: ${memoizedFormaterStric} 
-                  Registration date: ${memoizedFormater}`
-                }
-              </p>
-          }
+          <p className='other__id text'>
+            {pullPersons.id.name === '' &&
+            pullPersons.id.value === null ?
+            'Missing id info' :
+            `Name: ${pullPersons.id.name} 
+            Id value: ${pullPersons.id.value}`}
+          </p>
+          <p className='other__registered text'>
+            {
+              `Year: ${memoizedFormaterStric} 
+              Registration date: ${memoizedFormater}`
+            }
+          </p>
           <OtherLogin />
         </>
       ) : (

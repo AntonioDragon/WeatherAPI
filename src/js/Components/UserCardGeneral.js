@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useCallback, useState} from 'react'
 import usePull from '../Helpers/usePullContext'
 import GeneralLocation from './GeneralLocation'
 
@@ -7,7 +7,8 @@ const UserCardGeneral = (props) => {
   const [OpenGeneral, setOpenGeneral] = useState(false)
   const pullPersons = usePull().persons
 
-  const OpenAccordion = () => setOpenGeneral(!OpenGeneral)
+  const OpenAccordion = useCallback(
+      () => setOpenGeneral(!OpenGeneral), [setOpenGeneral, OpenGeneral])
 
   return (
     <div className='card__general info'>
@@ -21,31 +22,9 @@ const UserCardGeneral = (props) => {
               srcSet='../static/icon/CloseAccordion.png'
             />
           </label>
-          {
-            pullPersons.email ?
-            <p className='info__email text'>
-              Email:{pullPersons.email}
-            </p> : <p className='info__email text text--muted'>
-              Missing info email
-            </p>
-          }
-          {
-            pullPersons.cell ?
-            <p className='info__phone-home text'>
-              Home phone:{pullPersons.cell}
-            </p> : <p className='info__phone-home text text--muted'>
-              Missing info cell
-            </p>
-          }
-
-          {
-            pullPersons.phone ?
-            <p className='info__phone text'>
-              Phone: {pullPersons.phone}
-            </p> : <p className='info__phone text text--muted'>
-              Missing info phone
-            </p>
-          }
+          <p className='info__email text'>Email:{pullPersons.email}</p>
+          <p className='info__phone-home text'>Home phone:{pullPersons.cell}</p>
+          <p className='info__phone text'>Phone: {pullPersons.phone}</p>
           <GeneralLocation />
         </>
       ) : (
