@@ -19,7 +19,7 @@ const LoadingTracker = () => {
           setApiPull(false)
         })
       },
-      [setApiPull, setStatePull],
+      [setApiPull, setStatePull, validUserAPI],
   )
 
   return (
