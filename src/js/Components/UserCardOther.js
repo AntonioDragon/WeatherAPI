@@ -5,18 +5,18 @@ import {dateFormater, yearFormaterStric} from '../Helpers/formatersDate'
 
 
 const UserCardOther = (props) => {
-  const pullPersons = usePull().persons
+  const pullPerson = usePull().person
   const [OpenOther, setOpenOther] = useState(false)
 
   const OpenAccordion = useCallback(
       () => setOpenOther(!OpenOther), [setOpenOther, OpenOther])
 
   const memoizedFormater = useMemo(() =>
-    dateFormater(pullPersons.registered.date), [pullPersons.registered.date])
+    dateFormater(pullPerson.registered.date), [pullPerson.registered.date])
 
   const memoizedFormaterStric = useMemo(() =>
-    yearFormaterStric(pullPersons.registered.date),
-  [pullPersons.registered.date])
+    yearFormaterStric(pullPerson.registered.date),
+  [pullPerson.registered.date])
 
   return (
     <div className='card__other other'>
@@ -31,11 +31,11 @@ const UserCardOther = (props) => {
             />
           </label>
           <p className='other__id text'>
-            {pullPersons.id.name === '' &&
-            pullPersons.id.value === null ?
+            {pullPerson.id.name === '' &&
+            pullPerson.id.value === null ?
             'Missing id info' :
-            `Name: ${pullPersons.id.name} 
-            Id value: ${pullPersons.id.value}`}
+            `Name: ${pullPerson.id.name} 
+            Id value: ${pullPerson.id.value}`}
           </p>
           <p className='other__registered text'>
             {

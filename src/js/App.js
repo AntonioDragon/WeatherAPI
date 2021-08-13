@@ -9,18 +9,18 @@ import ContextApp from './Context/ContextApp'
 import LoadingTracker from './Components/LoadingTracker'
 
 const App = () => {
-  const [persons, setPersons] = useState()
-  const [error, setError] = useState()
+  const [person, setPerson] = useState('Missing')
+  const [error, setError] = useState('')
   return (
-    <ContextApp.Provider value={{persons, setPersons, setError}}>
+    <ContextApp.Provider value={{person, setPerson, setError}}>
       <div className='output'>
         <h1 className='output__title text--title'>UserAPI</h1>
         <LoadingTracker
         />
         {
-          error ?
+          (error && error != 'Missing') ?
             <h2>{`Error found ${error}`}</h2> : (
-              persons ?
+              (person && person != 'Missing') ?
               <UserCard /> :
               <p className="output__missing">Missing User</p>
             )

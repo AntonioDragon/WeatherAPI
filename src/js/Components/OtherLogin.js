@@ -3,7 +3,7 @@ import usePull from '../Helpers/usePullContext'
 
 const OtherLogin = (props) => {
   const [OpenLogin, setOpenLogin] = useState(false)
-  const pullPersons = usePull().persons
+  const pullPerson = usePull().person
 
   const OpenAccordion = useCallback(
       () => setOpenLogin(!OpenLogin), [setOpenLogin, OpenLogin])
@@ -21,19 +21,19 @@ const OtherLogin = (props) => {
             />
           </label>
           <p className='login__username text--muted'>
-            {`Username: ${pullPersons.login.username}`}</p>
+            {`Username: ${pullPerson.login.username}`}</p>
           <p className='login__password text--muted'>
-            {`Password: ${pullPersons.login.password}`}</p>
+            {`Password: ${pullPerson.login.password}`}</p>
           <p className='login__md5 text--muted'>
-            {`md5: ${pullPersons.login.md5}`}</p>
+            {`md5: ${pullPerson.login.md5}`}</p>
           <p className='login__salt text--muted'>
-            {`salt: ${pullPersons.login.salt}`}</p>
+            {`salt: ${pullPerson.login.salt}`}</p>
           <p className='login__sha1 text--muted'>
-            {`sha1: ${pullPersons.login.sha1}`}</p>
+            {`sha1: ${pullPerson.login.sha1}`}</p>
           <p className='login__sha256 text--muted'>
-            {`sha256: ${pullPersons.login.sha256}`}</p>
+            {`sha256: ${pullPerson.login.sha256}`}</p>
           <p className='login__uuid text--muted'>
-            {`uuid: ${pullPersons.login.uuid}`}</p>
+            {`uuid: ${pullPerson.login.uuid}`}</p>
         </>
       ) : (
         <label onClick={OpenAccordion} className='label'>

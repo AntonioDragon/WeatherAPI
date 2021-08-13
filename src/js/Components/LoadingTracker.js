@@ -4,22 +4,23 @@ import usePull from '../Helpers/usePullContext'
 import validUserAPI from '../Helpers/validUserApi'
 
 const LoadingTracker = () => {
-  const setStatePull = usePull()
+  const contextPull = usePull()
   const [apiPull, setApiPull] = useState(false)
 
   const newUserApi = useCallback(
       () => {
         setApiPull(true)
         userApiPull().then((value) => {
-          validUserAPI(value)
-          setStatePull.setPersons(value)
+          contextPull.setPerson(validUserAPI(value))
+          contextPull.setError('Missing')
           setApiPull(false)
         }).catch((value) => {
-          setStatePull.setError(value)
+          contextPull.setError(value)
+          contextPull.setPerson('Missing')
           setApiPull(false)
         })
       },
-      [setApiPull, setStatePull, validUserAPI],
+      [setApiPull, contextPull],
   )
 
   return (

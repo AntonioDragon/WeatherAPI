@@ -5,7 +5,7 @@ import GeneralLocation from './GeneralLocation'
 
 const UserCardGeneral = (props) => {
   const [OpenGeneral, setOpenGeneral] = useState(false)
-  const pullPersons = usePull().persons
+  const pullPerson = usePull().person
 
   const OpenAccordion = useCallback(
       () => setOpenGeneral(!OpenGeneral), [setOpenGeneral, OpenGeneral])
@@ -22,9 +22,9 @@ const UserCardGeneral = (props) => {
               srcSet='../static/icon/CloseAccordion.png'
             />
           </label>
-          <p className='info__email text'>Email:{pullPersons.email}</p>
-          <p className='info__phone-home text'>Home phone:{pullPersons.cell}</p>
-          <p className='info__phone text'>Phone: {pullPersons.phone}</p>
+          <p className='info__email text'>Email:{pullPerson.email}</p>
+          <p className='info__phone-home text'>Home phone:{pullPerson.cell}</p>
+          <p className='info__phone text'>Phone: {pullPerson.phone}</p>
           <GeneralLocation />
         </>
       ) : (

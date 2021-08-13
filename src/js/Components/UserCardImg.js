@@ -2,13 +2,13 @@ import React from 'react'
 import usePull from '../Helpers/usePullContext'
 
 const UserCardImg = (props) => {
-  const pullPersons = usePull().persons
+  const pullPerson = usePull().person
 
   return (
     <div className='card__img'>
       {
-        pullPersons.picture.large ?
-        <img src={pullPersons.picture.large} alt='Image User'/> :
+        pullPerson.picture.large ?
+        <img src={pullPerson.picture.large} alt='Image User'/> :
         <p className="text--muted">Missing Image</p>
       }
     </div>

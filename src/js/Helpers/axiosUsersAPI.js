@@ -11,7 +11,7 @@ const userApiPull = () =>
         return response.data.results[0]
       })
       .catch((e) => {
-        temp = e
+        return e
       })
 
 export default userApiPull

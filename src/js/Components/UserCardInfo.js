@@ -3,26 +3,26 @@ import usePull from '../Helpers/usePullContext'
 import {dateFormater, yearFormaterStric} from '../Helpers/formatersDate'
 
 const UserCardInfo = () => {
-  const pullPersons = usePull().persons
+  const pullPerson = usePull().person
 
   const memoizedFormater = useMemo(() =>
-    dateFormater(pullPersons.dob.date), [pullPersons.dob.date])
+    dateFormater(pullPerson.dob.date), [pullPerson.dob.date])
 
   const memoizedFormaterStric = useMemo(() =>
-    yearFormaterStric(pullPersons.dob.date), [pullPersons.dob.date])
+    yearFormaterStric(pullPerson.dob.date), [pullPerson.dob.date])
 
   return (
     <div className='card__people people'>
       <p className='people__name text'>
-        {`${pullPersons.name.title} 
-         ${pullPersons.name.last} 
-         ${pullPersons.name.first}`}
+        {`${pullPerson.name.title} 
+         ${pullPerson.name.last} 
+         ${pullPerson.name.first}`}
       </p>
       <p className='people__gender text'>
-        {`Gender: ${pullPersons.gender}`}
+        {`Gender: ${pullPerson.gender}`}
       </p>
       <p className='people__nation text'>
-        {`Nationality: ${pullPersons.nat}`}
+        {`Nationality: ${pullPerson.nat}`}
       </p>
       <p className='people__dob text'>
         {`Date of Birth: ${memoizedFormater} 

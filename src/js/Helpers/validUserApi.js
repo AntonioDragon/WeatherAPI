@@ -1,52 +1,46 @@
 const validUserAPI = (temp) =>{
-  if (!temp.cell) temp.cell = 'Missing info'
-  if (!temp.email) temp.email = 'Missing info'
-  if (!temp.gender) temp.gender = 'Missing info'
-  if (!temp.nat) temp.nat = 'Missing info'
-  if (!temp.phone) temp.phone = 'Missing info'
-  if (!temp.dob) throw new 'Missing API value - dob'
-  if (!temp.dob.age) temp.dob.age = 'Missing info'
-  if (!temp.dob.date) temp.dob.date = 'Missing info'
-  if (!temp.id) throw new 'Missing API value - id'
-  if (!temp.id.name) temp.id.name = 'Missing info'
-  if (!temp.id.value) temp.id.value = 'Missing info'
-  if (!temp.location) throw new 'Missing API value - location'
-  if (!temp.location.city) temp.location.city = 'Missing info'
-  if (!temp.location.country) temp.location.country = 'Missing info'
-  if (!temp.location.postcode) temp.location.postcode = 'Missing info'
-  if (!temp.location.state) temp.location.state = 'Missing info'
-  if (!temp.location.coordinates) throw new 'Missing API value - location'
-  if (!temp.location.coordinates.latitude)
-    temp.location.coordinates.latitude = 'Missing info'
-  if (!temp.location.coordinates.longitude)
-    temp.coordinates.longitude = 'Missing info'
-  if (!temp.location.street) throw new 'Missing API value - location'
-  if (!temp.location.street.name)
-    temp.location.street.name = 'Missing info'
-  if (!temp.location.street.number)
-    temp.location.street.number = 'Missing info'
-  if (!temp.location.timezone) throw new 'Missing API value - location'
-  if (!temp.location.timezone.description)
-    temp.location.timezone.description = 'Missing info'
-  if (!temp.location.timezone.offset)
-    temp.location.timezone.offset = 'Missing info'
-  if (!temp.login) throw new 'Missing API value - login'
-  if (!temp.login.md5) temp.login.md5 = 'Missing info'
-  if (!temp.login.password) temp.login.password = 'Missing info'
-  if (!temp.login.salt) temp.login.salt = 'Missing info'
-  if (!temp.login.sha1) temp.login.sha1 = 'Missing info'
-  if (!temp.login.sha256) temp.login.sha256 = 'Missing info'
-  if (!temp.login.username) temp.login.username = 'Missing info'
-  if (!temp.login.uuid) temp.login.uuid = 'Missing info'
-  if (!temp.name) throw new 'Missing API value - name'
-  if (!temp.name.first) temp.name.first = 'Missing info'
-  if (!temp.name.last) temp.name.last = 'Missing info'
-  if (!temp.name.title) temp.name.title = 'Missing info'
-  if (!temp.picture) throw new 'Missing API value - picture'
-  if (!temp.registered) throw new 'Missing API value - registered'
-  if (!temp.registered.age) temp.registered.age = 'Missing info'
-  if (!temp.registered.date) temp.registered.date = 'Missing info'
-  return temp
+  const errorCreate = (message) =>{
+    throw new Error(`Api value missing nesting : ${message}`)
+  }
+
+  const missing = 'Missing info'
+
+  const {cell = missing, email = missing,
+    gender = missing, nat = missing, phone = missing,
+    dob: {age: ageDob = missing, date: dateDob = missing} = errorCreate('dob'),
+    id: {name: idName = missing, value = missing} = errorCreate('id'),
+    location: {city = missing, country = missing,
+      postcode = missing, state = missing,
+      coordinates: {latitude = missing, longitude = missing},
+      street: {name: nameStreet = missing, number = missing},
+      timezone: {description = missing,
+        offset = missing}} = errorCreate('location'),
+    login: {md5 = missing, password = missing, salt = missing, sha1 = missing,
+      sha256 = missing, username = missing,
+      uuid = missing} = errorCreate('login'),
+    name: {first = missing, last = missing,
+      title = missing} = errorCreate('name'),
+    picture: {large = missing, medium = missing,
+      thumbnail = missing} = errorCreate('picture'),
+    registered: {age: ageReg = missing,
+      date: dateReg = missing} = errorCreate('registered'),
+  } = temp
+
+  const validObj = {
+    cell: cell, email: email, gender: gender, nat: nat, phone: phone,
+    dob: {age: ageDob, date: dateDob},
+    id: {name: idName, value: value},
+    location: {city: city, country: country, postcode: postcode, state: state,
+      coordinates: {latitude: latitude, longitude: longitude},
+      street: {name: nameStreet, number: number},
+      timezone: {description: description, offset: offset}},
+    login: {md5: md5, password: password, salt: salt, sha1: sha1,
+      sha256: sha256, username: username, uuid: uuid},
+    name: {first: first, last: last, title: title},
+    picture: {large: large, medium: medium, thumbnail: thumbnail},
+    registered: {age: ageReg, date: dateReg},
+  }
+  return validObj
 }
 
 export default validUserAPI
