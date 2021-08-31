@@ -1,17 +1,17 @@
 import axios from 'axios'
 
-const userApiPull = () =>
-  axios({
-    url: 'https://randomuser.me/api/',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-      .then((response) => {
-        return response.data.results[0]
-      })
-      .catch((e) => {
-        return e
-      })
+const userApiPull = (url) => axios({
+  url: url,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+    .then((response) => {
+      return response
+    })
+    .catch((e) => {
+      return e
+    })
+
 
 export default userApiPull
