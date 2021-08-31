@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
   listText: {
     maxWidth: 100,
   },
+  listImg: {
+    width: 50,
+  },
 }))
 
 
@@ -53,6 +56,7 @@ const ListWeather = () => {
                 height='30'
                 image={imagesArrayList[index]}
                 title='Contemplative Reptile'
+                className ={classes.listImg}
               />
             </ListItemAvatar>
             <ListItemText className={classes.listText} primary={`

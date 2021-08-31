@@ -27,7 +27,7 @@ const BlockCards = () => {
       <div className={classes.cardOverflow}>
         {
           hourseArray.map((value, index) =>
-            <CardWeather key={value} value={index}/>,
+            <CardWeather key={value} value={value} index={index}/>,
           )
         }
       </div>

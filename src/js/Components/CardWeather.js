@@ -35,7 +35,7 @@ const CardWeather = (props) => {
           component='img'
           alt='Contemplative Reptile'
           height='50'
-          image={imagesArrayCard[props.value]}
+          image={imagesArrayCard[props.index]}
           title='Contemplative Reptile'
         />
         <CardContent className={classes.cardContent}>
@@ -44,19 +44,19 @@ const CardWeather = (props) => {
             ${props.value > 12 ? 'am' : 'pm'}`}
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
-            {`${Math.trunc(weather.data.hourly[props.value].temp)}
+            {`${Math.trunc(weather.data.hourly[props.index].temp)}
             ${metric ? ' ℃': ' K'}`}
           </Typography>
           <CardActions className={classes.icons} disableSpacing>
             <OpacityIcon color="primary"/>
             <Typography variant='body2' color='textPrimary' component='p'>
-              {`${weather.data.hourly[props.value].pop}%`}
+              {`${weather.data.hourly[props.index].pop}%`}
             </Typography>
           </CardActions>
           <CardActions className={classes.icons} disableSpacing>
             <WavesIcon color="primary"/>
             <Typography variant='body2' color='textPrimary' component='p'>
-              {Math.trunc(weather.data.hourly[props.value].wind_speed)}
+              {Math.trunc(weather.data.hourly[props.index].wind_speed)}
             </Typography>
           </CardActions>
         </CardContent>
