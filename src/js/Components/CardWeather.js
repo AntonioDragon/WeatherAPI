@@ -45,7 +45,7 @@ const CardWeather = (props) => {
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
             {`${Math.trunc(weather.data.hourly[props.index].temp)}
-            ${metric ? ' ℃': ' K'}`}
+            ${metric ? ' ℃': '°F'}`}
           </Typography>
           <CardActions className={classes.icons} disableSpacing>
             <OpacityIcon color="primary"/>

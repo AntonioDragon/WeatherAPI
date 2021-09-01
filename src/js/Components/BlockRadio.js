@@ -23,18 +23,18 @@ const BlockRadio = (props) => {
     const temp = weather
     if (metric) {
       for (let value of temp.data.daily) {
-        value.temp.min = value.temp.min + 273
-        value.temp.max = value.temp.max + 273
+        value.temp.min = (value.temp.min * 9/5) + 32
+        value.temp.max = (value.temp.max * 9/5) + 32
       }
       for (let value of temp.data.hourly)
-        value.temp = value.temp + 273
+        value.temp = (value.temp * 9/5) + 32
     } else {
       for (let value of temp.data.daily) {
-        value.temp.min = value.temp.min - 273
-        value.temp.max = value.temp.max - 273
+        value.temp.min = (value.temp.min - 32) * 5/9
+        value.temp.max = (value.temp.max - 32) * 5/9
       }
       for (let value of temp.data.hourly)
-        value.temp = value.temp - 273
+        value.temp = (value.temp - 32) * 5/9
     }
     setWeather(temp)
     setSelectedValue(event.target.value);
@@ -57,7 +57,7 @@ const BlockRadio = (props) => {
         name="radio-button-demo"
         inputProps={{'aria-label': 'B'}}
       />
-      <span>K</span>
+      <span>°F</span>
     </div>
   );
 }

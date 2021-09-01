@@ -13,7 +13,6 @@ const timeDayCheck = () =>{
       i = -1
       lengthTime = hours - 1
     }
-  console.log(newArrTime)
   return newArrTime
 }
 

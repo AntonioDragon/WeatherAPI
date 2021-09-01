@@ -1,7 +1,7 @@
 import 'normalize.css'
 import '../scss/style.scss'
 
-import React, {useCallback, useState} from 'react'
+import React, { useCallback, useState } from 'react'
 import ReactDOM from 'react-dom'
 import NavBar from './Components/NavBar'
 import BlockCards from './Components/BlockCards'
@@ -46,20 +46,25 @@ const App = () => {
         const coordCity = searchCity(city)
         if (coordCity) {
           setError('Missing')
-          const {coord: {lat, lon}} = coordCity
+          const {
+            coord: {lat, lon},
+          } = coordCity
           const urlWeather = `http://api.openweathermap.org/data/2.5/onecall?&appid=2e520548e365d2804c02e48c9cae65a0&lat=${lat}&lon=${lon}&units=metric&lang=ru`
           setDaysArray(daysWeekCheck())
           const hoursArr = timeDayCheck()
           setHourseArray(hoursArr)
-          userApiPull(urlWeather).then((value)=>{
-            const weatherTransform = transformApi(value)
-            setWeather(weatherTransform)
-            setImagesArrayCard(iconsWeather(weatherTransform, true, hoursArr))
-            setImagesArrayList(iconsWeather(weatherTransform, false))
-            setError('Missing')
-          }).catch((e)=>{
-            setError(e)
-          })
+          userApiPull(urlWeather)
+              .then((value) => {
+                const weatherTransform = transformApi(value)
+                setWeather(weatherTransform)
+                setImagesArrayCard(
+                    iconsWeather(weatherTransform, true, hoursArr))
+                setImagesArrayList(iconsWeather(weatherTransform, false))
+                setError('Missing')
+              })
+              .catch((e) => {
+                setError(e)
+              })
           setCity(city)
         } else {
           setError('Not found your city')
@@ -70,41 +75,49 @@ const App = () => {
   )
 
   return (
-    <ContextApp.Provider value={{
-      weather,
-      setWeather,
-      daysArray,
-      hourseArray,
-      searchCity,
-      searchWeather,
-      metric,
-      imagesArrayList,
-      imagesArrayCard,
-    }}>
-      <NavBar/>
-      {
-        error == 'Missing' ?
-        weather != 'Missing' &&
-        <>
-          <h1 className={classes.title}>{city}</h1>
-          <BlockRadio
-            setMetric={setMetric}
-          />
-          <Paper className={classes.wetherInfoDays} elevation={3}>
-            <Paper className={classes.wetherInfoTodayTime} elevation={3}>
-              <ListWeather/>
+    <ContextApp.Provider
+      value={{
+        weather,
+        setWeather,
+        daysArray,
+        hourseArray,
+        searchCity,
+        searchWeather,
+        metric,
+        imagesArrayList,
+        imagesArrayCard,
+        setError,
+        setDaysArray,
+        setHourseArray,
+        setWeather,
+        setImagesArrayCard,
+        setImagesArrayList,
+        setCity,
+      }}
+    >
+      <NavBar />
+      {error == 'Missing' ? (
+        weather != 'Missing' && (
+          <>
+            <h1 className={classes.title}>{city}</h1>
+            <BlockRadio setMetric={setMetric} />
+            <Paper className={classes.wetherInfoDays} elevation={3}>
+              <Paper className={classes.wetherInfoTodayTime} elevation={3}>
+                <ListWeather />
+              </Paper>
+              <BlockCards />
             </Paper>
-            <BlockCards/>
-          </Paper>
-        </> :
-      <Paper elevation={3}>
-        <p>Sorry, an error has occurred.</p>
-        <p className={classes.errorOutput}>{error}</p>
-        <p>Please try to double-check the entered city or try again later</p>
-      </Paper>
-      }
+          </>
+        )
+      ) : (
+        <Paper elevation={3}>
+          <p>Sorry, an error has occurred.</p>
+          <p className={classes.errorOutput}>{error}</p>
+          <p>Please try to double-check the entered city or try again later</p>
+        </Paper>
+      )}
       <h2>Favorites city</h2>
-      <BlockFavorites/>
+      <BlockFavorites />
     </ContextApp.Provider>
   )
 }

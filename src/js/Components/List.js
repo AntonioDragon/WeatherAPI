@@ -62,7 +62,7 @@ const ListWeather = () => {
             <ListItemText className={classes.listText} primary={`
             ${Math.trunc(weather.data.daily[index].temp.min)}/
             ${Math.trunc(weather.data.daily[index].temp.max)}
-            ${metric ? ' °C' : ' K'}`
+            ${metric ? ' °C' : '°F'}`
             }/>
             <OpacityIcon color="primary"/>
             <ListItemText className={classes.listText} primary={
