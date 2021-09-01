@@ -1,7 +1,7 @@
 import 'normalize.css'
 import '../scss/style.scss'
 
-import React, { useCallback, useState } from 'react'
+import React, {useCallback, useState} from 'react'
 import ReactDOM from 'react-dom'
 import NavBar from './Components/NavBar'
 import BlockCards from './Components/BlockCards'
@@ -16,6 +16,7 @@ import daysWeekCheck from './Helpers/daysWeekCheck'
 import BlockRadio from './Components/BlockRadio'
 import iconsWeather from './Helpers/iconsWeather'
 import transformApi from './Helpers/transformApi'
+import validApi from './Helpers/validApi'
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -55,6 +56,7 @@ const App = () => {
           setHourseArray(hoursArr)
           userApiPull(urlWeather)
               .then((value) => {
+                validApi(value)
                 const weatherTransform = transformApi(value)
                 setWeather(weatherTransform)
                 setImagesArrayCard(
@@ -67,7 +69,7 @@ const App = () => {
               })
           setCity(city)
         } else {
-          setError('Not found your city')
+          setError({message: 'Not found your city'})
           setWeather('Missing')
         }
       },
@@ -110,11 +112,11 @@ const App = () => {
           </>
         )
       ) : (
-        <Paper elevation={3}>
+        <div>
           <p>Sorry, an error has occurred.</p>
-          <p className={classes.errorOutput}>{error}</p>
+          <p>{error.message}</p>
           <p>Please try to double-check the entered city or try again later</p>
-        </Paper>
+        </div>
       )}
       <h2>Favorites city</h2>
       <BlockFavorites />
