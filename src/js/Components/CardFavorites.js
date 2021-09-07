@@ -1,12 +1,13 @@
-import React, {useState} from 'react'
+import React, {useCallback, useState} from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
-import CreateIcon from '@material-ui/icons/Create';
+import CreateIcon from '@material-ui/icons/Create'
+import DeleteIcon from '@material-ui/icons/Delete'
 import FormDialog from './FormDialog'
-import usePull from '../Helpers/usePullContext'
-import ModalAnswer from './ModalAnswer'
+import {connect} from 'react-redux'
+import {addModeOn, changeModeOn, deleteFavoriteCity, fetchWeather} from '../Redux/actions'
 
 const useStyles = makeStyles((theme) =>({
   root: {
@@ -35,64 +36,83 @@ const useStyles = makeStyles((theme) =>({
 }));
 
 const CardFavorites = (props) => {
-  const {searchCity, searchWeather} = usePull()
   const classes = useStyles()
-  const [open, setOpen] = useState(false)
-  const [newFavorite, setNewFavorite] = useState('new')
+  const [openFormDialog, setOpenFormDialog] = useState(false)
 
-  const [openModal, setOpenModal] = React.useState(false)
+  const {
+    favorites,
+    value,
+    id,
+    addModeOn,
+    changeModeOn,
+    deleteFavoriteCity,
+    fetchWeather,
+  } = props
 
-  const favoriteChange = () =>{
-    let coord = searchCity(newFavorite)
-    if (coord) {
-      let temp = props.favoritesCity
-      temp[props.id].content = newFavorite
-      props.setFavoritesCity(temp)
-    }
-    else handleModalOpen()
-    handleClose()
-  }
+  const favoriteOpenAddCity = useCallback(
+      () => {
+        if (value.content == '+') {
+          addModeOn()
+          setOpenFormDialog(true)
+        } else fetchWeather(value.content)
+      },
+      [addModeOn, fetchWeather, value],
+  )
 
-  const handleModalOpen = () =>setOpenModal(true)
-  const handleModalClose = () => setOpenModal(false)
-  const handleClickOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const favoriteChangeCity = useCallback(
+      () => {
+        changeModeOn()
+        setOpenFormDialog(true)
+      },
+      [changeModeOn],
+  )
 
-  const openWetherFavorite = () =>{
-    if (props.favoritesCity[props.id].content == '+')
-      handleClickOpen()
-    else searchWeather(props.favoritesCity[props.id].content)
-  }
+
+  const favoriteDeleteCity = useCallback(
+      () => deleteFavoriteCity(favorites, id),
+      [deleteFavoriteCity, id, favorites],
+  )
 
   return (
     <Card className={classes.root}>
-      <ModalAnswer
-        handleModalClose={handleModalClose}
-        openModal={openModal}
-      />
       <FormDialog
-        favoriteChange={favoriteChange}
-        handleClose={handleClose}
-        open={open}
-        setNewFavorite={setNewFavorite}
+        open={openFormDialog}
+        idCardFavorite={id}
+        setOpenFormDialog={setOpenFormDialog}
       />
       <CardActions>
         <Button
-          onClick={()=>openWetherFavorite()}
+          onClick={()=>favoriteOpenAddCity()}
           className={classes.buttonFavorites}
           variant="contained"
           color="primary"
         >
-          {props.value.content}
+          {value.content}
         </Button>
         {
-          props.value.content != '+' &&
-          <CreateIcon onClick={()=>handleClickOpen()}
-            className={classes.iconCard}/>
+          value.content != '+' &&
+          <>
+            <CreateIcon onClick={favoriteChangeCity}
+              className={classes.iconCard}/>
+            <DeleteIcon onClick={favoriteDeleteCity}/>
+          </>
         }
       </CardActions>
     </Card>
   )
 }
 
-export default CardFavorites
+const mapDispatchToProps = {
+  addModeOn,
+  changeModeOn,
+  deleteFavoriteCity,
+  fetchWeather,
+}
+
+const mapStateToProps = (state) =>{
+  return {
+    favorites: state.favorites.favorites,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardFavorites)

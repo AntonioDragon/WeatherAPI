@@ -2,7 +2,7 @@ import React from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import CardWeather from './CardWeather'
 import {Paper} from '@material-ui/core'
-import usePull from '../Helpers/usePullContext'
+import {connect} from 'react-redux'
 
 const useStyles = makeStyles((theme) =>({
   blockCard: {
@@ -19,14 +19,13 @@ const useStyles = makeStyles((theme) =>({
   },
 }))
 
-const BlockCards = () => {
+const BlockCards = ({hoursArr}) => {
   const classes = useStyles()
-  const {hourseArray} = usePull()
   return (
     <Paper className={classes.blockCard} elevation={2}>
       <div className={classes.cardOverflow}>
         {
-          hourseArray.map((value, index) =>
+          hoursArr.map((value, index) =>
             <CardWeather key={value} value={value} index={index}/>,
           )
         }
@@ -35,5 +34,10 @@ const BlockCards = () => {
   )
 }
 
-export default BlockCards
+const mapStateToProps = (state) =>{
+  return {
+    hoursArr: state.weather.weather.hoursArr,
+  }
+}
 
+export default connect(mapStateToProps, null)(BlockCards)

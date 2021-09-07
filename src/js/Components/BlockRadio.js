@@ -1,8 +1,9 @@
-import React from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {blue} from '@material-ui/core/colors';
-import Radio from '@material-ui/core/Radio';
-import usePull from '../Helpers/usePullContext';
+import React, {useCallback} from 'react'
+import {withStyles} from '@material-ui/core/styles'
+import {blue} from '@material-ui/core/colors'
+import Radio from '@material-ui/core/Radio'
+import {connect} from 'react-redux'
+import {metricStateToFahrenheit, metricStateToСelsius} from '../Redux/actions'
 
 const BlueRadio = withStyles({
   root: {
@@ -12,33 +13,20 @@ const BlueRadio = withStyles({
     },
   },
   checked: {},
-})((props) => <Radio color="default" {...props} />);
+})((props) => <Radio color="default" {...props} />)
 
 const BlockRadio = (props) => {
-  const {metric, weather, setWeather} = usePull()
-  const [selectedValue, setSelectedValue] = React.useState('a');
+  const [selectedValue, setSelectedValue] = React.useState('a')
 
-  const handleChange = (event) => {
-    props.setMetric(!metric)
-    const temp = weather
-    if (metric) {
-      for (let value of temp.data.daily) {
-        value.temp.min = (value.temp.min * 9/5) + 32
-        value.temp.max = (value.temp.max * 9/5) + 32
-      }
-      for (let value of temp.data.hourly)
-        value.temp = (value.temp * 9/5) + 32
-    } else {
-      for (let value of temp.data.daily) {
-        value.temp.min = (value.temp.min - 32) * 5/9
-        value.temp.max = (value.temp.max - 32) * 5/9
-      }
-      for (let value of temp.data.hourly)
-        value.temp = (value.temp - 32) * 5/9
-    }
-    setWeather(temp)
-    setSelectedValue(event.target.value);
-  };
+  const handleChange = useCallback(
+      () => {
+        const {metricStateToСelsius, metricStateToFahrenheit, weather} = props
+        if (selectedValue == 'b') metricStateToСelsius(weather)
+        if (selectedValue == 'a') metricStateToFahrenheit(weather)
+        setSelectedValue(event.target.value)
+      },
+      [props],
+  )
 
   return (
     <div>
@@ -59,7 +47,18 @@ const BlockRadio = (props) => {
       />
       <span>°F</span>
     </div>
-  );
+  )
 }
 
-export default BlockRadio
+const mapDispatchToProps = {
+  metricStateToFahrenheit,
+  metricStateToСelsius,
+}
+
+const mapStateToProps = (state) =>{
+  return {
+    weather: state.weather.weather,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BlockRadio)

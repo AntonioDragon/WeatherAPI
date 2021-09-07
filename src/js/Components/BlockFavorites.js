@@ -1,7 +1,8 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import {Paper} from '@material-ui/core'
 import CardFavorites from './CardFavorites'
+import {connect} from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   buttonFavorites: {
@@ -17,27 +18,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BlockFavorites = () => {
+const BlockFavorites = ({favorites}) => {
   const classes = useStyles()
-  const [favoritesCity, setFavoritesCity] = useState(
-      [{content: 'London'}, {content: 'Москва'}, {content: 'Amsterdam'},
-        {content: '+'}, {content: '+'}])
 
   return (
     <Paper className={classes.blockFavorites} elevation={2}>
       {
-        favoritesCity.map((value, index)=>
+        favorites.map((value, index)=>
           <CardFavorites
             key={index}
             value={value}
             id={index}
-            setFavoritesCity={setFavoritesCity}
-            favoritesCity={favoritesCity}
           />)
       }
     </Paper>
   )
 }
 
-export default BlockFavorites
+const mapStateToProps = (state) =>{
+  return {
+    favorites: state.favorites.favorites,
+  }
+}
+
+export default connect(mapStateToProps, null)(BlockFavorites)
 

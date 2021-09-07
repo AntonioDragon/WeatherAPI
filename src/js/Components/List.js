@@ -4,12 +4,12 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import WavesIcon from '@material-ui/icons/Waves';
-import OpacityIcon from '@material-ui/icons/Opacity';
+import WavesIcon from '@material-ui/icons/Waves'
+import OpacityIcon from '@material-ui/icons/Opacity'
 import {CardMedia} from '@material-ui/core'
 import useWindowDimensions from '../Helpers/getWindowDimensions'
 import useDaysWeek from '../Helpers/daysWeek'
-import usePull from '../Helpers/usePullContext'
+import {connect} from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -31,46 +31,44 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const ListWeather = () => {
+const ListWeather = ({weather}) => {
   const classes = useStyles()
   const {width} = useWindowDimensions()
   const {arrDaysWeek, arrDaysWeekMin} = useDaysWeek()
-  const {weather, daysArray, metric, imagesArrayList} = usePull()
-
   return (
     <List dense className={classes.list}>
-      {daysArray.map((value, index) => {
+      {weather.daysArr.map((value, index) => {
         return (
           <ListItem className={classes.listItem} key={value} button>
             <ListItemText
               className={classes.listWeek}
               primary={
                 width > 600 ?
-                arrDaysWeek[index] :
-                arrDaysWeekMin[index]
+                arrDaysWeek[value] :
+                arrDaysWeekMin[value]
               }/>
             <ListItemAvatar>
               <CardMedia
                 component='img'
                 alt='Weather image'
                 height='30'
-                image={imagesArrayList[index]}
+                image={weather.iconsWeatherDaily[index]}
                 title='Contemplative Reptile'
                 className ={classes.listImg}
               />
             </ListItemAvatar>
             <ListItemText className={classes.listText} primary={`
-            ${Math.trunc(weather.data.daily[index].temp.min)}/
-            ${Math.trunc(weather.data.daily[index].temp.max)}
-            ${metric ? ' °C' : '°F'}`
+            ${Math.trunc(weather.weatherDaily[index].temp.min)}/
+            ${Math.trunc(weather.weatherDaily[index].temp.max)}
+             ${weather.metric ? ' °C' : '°F'}`
             }/>
             <OpacityIcon color="primary"/>
             <ListItemText className={classes.listText} primary={
-              `${weather.data.daily[index].pop}%`
+              `${weather.weatherDaily[index].pop}%`
             }/>
             <WavesIcon color="primary"/>
             <ListItemText className={classes.listText} primary={
-              `${weather.data.daily[index].wind_speed}m/s`
+              `${weather.weatherDaily[index].wind_speed}m/s`
             }/>
           </ListItem>
         )
@@ -79,4 +77,10 @@ const ListWeather = () => {
   )
 }
 
-export default ListWeather
+const mapStateToProps = (state) => {
+  return {
+    weather: state.weather.weather,
+  }
+}
+
+export default connect(mapStateToProps, null)(ListWeather)

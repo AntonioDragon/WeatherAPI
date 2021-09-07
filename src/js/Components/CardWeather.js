@@ -6,9 +6,9 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import {CardActions} from '@material-ui/core'
-import WavesIcon from '@material-ui/icons/Waves';
-import OpacityIcon from '@material-ui/icons/Opacity';
-import usePull from '../Helpers/usePullContext'
+import WavesIcon from '@material-ui/icons/Waves'
+import OpacityIcon from '@material-ui/icons/Opacity'
+import {connect} from 'react-redux'
 
 const useStyles = makeStyles((theme)=>({
   root: {
@@ -24,9 +24,8 @@ const useStyles = makeStyles((theme)=>({
   },
 }))
 
-const CardWeather = (props) => {
+const CardWeather = ({weather, index, value}) => {
   const classes = useStyles()
-  const {weather, metric, imagesArrayCard} = usePull()
 
   return (
     <Card className={classes.root}>
@@ -35,35 +34,40 @@ const CardWeather = (props) => {
           component='img'
           alt='Contemplative Reptile'
           height='50'
-          image={imagesArrayCard[props.index]}
+          image={weather.iconsWeatherHours[index]}
           title='Contemplative Reptile'
         />
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant='h6'>
-            {`${props.value >= 12 ? props.value-12 : props.value}:00 
-            ${props.value > 12 ? 'am' : 'pm'}`}
+            {`${value >= 12 ? value-12 : value}:00 
+            ${value > 12 ? 'am' : 'pm'}`}
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
-            {`${Math.trunc(weather.data.hourly[props.index].temp)}
-            ${metric ? ' ℃': '°F'}`}
+            {`${Math.trunc(weather.weatherHourly[index].temp)}
+             ${weather.metric ? ' ℃': '°F'}`}
           </Typography>
           <CardActions className={classes.icons} disableSpacing>
             <OpacityIcon color="primary"/>
             <Typography variant='body2' color='textPrimary' component='p'>
-              {`${weather.data.hourly[props.index].pop}%`}
+              {`${weather.weatherHourly[index].pop}%`}
             </Typography>
           </CardActions>
           <CardActions className={classes.icons} disableSpacing>
             <WavesIcon color="primary"/>
             <Typography variant='body2' color='textPrimary' component='p'>
-              {Math.trunc(weather.data.hourly[props.index].wind_speed)}
+              {Math.trunc(weather.weatherHourly[index].wind_speed)}
             </Typography>
           </CardActions>
         </CardContent>
       </CardActionArea>
-
     </Card>
   )
 }
 
-export default CardWeather
+const mapStateToProps = (state) =>{
+  return {
+    weather: state.weather.weather,
+  }
+}
+
+export default connect(mapStateToProps, null)(CardWeather)

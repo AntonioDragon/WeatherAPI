@@ -6,7 +6,8 @@ import InputBase from '@material-ui/core/InputBase'
 import {alpha, makeStyles} from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
 import {Button, Icon} from '@material-ui/core'
-import usePull from '../Helpers/usePullContext'
+import {fetchWeather} from '../Redux/actions'
+import {connect} from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,10 +66,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const NavBar = (props) => {
+const NavBar = ({fetchWeather}) => {
   const classes = useStyles()
   const [searchInput, setSearchInput] = useState('')
-  const {searchWeather} = usePull()
+
   return (
     <div className={classes.root}>
       <AppBar position='static'>
@@ -95,7 +96,7 @@ const NavBar = (props) => {
             color="primary"
             className={classes.buttonSearch}
             endIcon={<Icon>send</Icon>}
-            onClick={()=>searchWeather(searchInput)}
+            onClick={() => fetchWeather(searchInput)}
           >
             Search
           </Button>
@@ -105,4 +106,8 @@ const NavBar = (props) => {
   )
 }
 
-export default NavBar
+const mapDispatchToProps = {
+  fetchWeather,
+}
+
+export default connect(null, mapDispatchToProps)(NavBar)
