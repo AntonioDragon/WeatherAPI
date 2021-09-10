@@ -7,9 +7,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import WavesIcon from '@material-ui/icons/Waves'
 import OpacityIcon from '@material-ui/icons/Opacity'
 import {CardMedia} from '@material-ui/core'
-import useWindowDimensions from '../Helpers/getWindowDimensions'
-import useDaysWeek from '../Helpers/daysWeek'
-import {connect} from 'react-redux'
+import useWindowDimensions from '../helpers/getWindowDimensions'
+import useDaysWeek from '../helpers/daysWeek'
+import {useSelector} from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -31,10 +31,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const ListWeather = ({weather}) => {
+const ListWeather = () => {
   const classes = useStyles()
   const {width} = useWindowDimensions()
   const {arrDaysWeek, arrDaysWeekMin} = useDaysWeek()
+  const weather = useSelector(state => state.weather.weather)
   return (
     <List dense className={classes.list}>
       {weather.daysArr.map((value, index) => {
@@ -52,7 +53,7 @@ const ListWeather = ({weather}) => {
                 component='img'
                 alt='Weather image'
                 height='30'
-                image={weather.iconsWeatherDaily[index]}
+                image={weather.weatherDaily[index].iconWether}
                 title='Contemplative Reptile'
                 className ={classes.listImg}
               />
@@ -64,7 +65,7 @@ const ListWeather = ({weather}) => {
             }/>
             <OpacityIcon color="primary"/>
             <ListItemText className={classes.listText} primary={
-              `${weather.weatherDaily[index].pop}%`
+              `${Math.trunc(weather.weatherDaily[index].pop * 100)}%`
             }/>
             <WavesIcon color="primary"/>
             <ListItemText className={classes.listText} primary={
@@ -77,10 +78,4 @@ const ListWeather = ({weather}) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    weather: state.weather.weather,
-  }
-}
-
-export default connect(mapStateToProps, null)(ListWeather)
+export default ListWeather

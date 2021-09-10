@@ -1,3 +1,4 @@
-dist/
-node_modules/
-.eslintrc.js
+/node_modules
+/build
+.env.local
+

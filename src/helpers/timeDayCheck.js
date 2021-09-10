@@ -4,7 +4,7 @@ const timeDayCheck = () =>{
   let hours
   const newArrTime = []
   const timeNow = format(new Date(), 'p')
-  if (timeNow[1] == ':') hours = parseInt(timeNow[0])
+  if (timeNow[1] === ':') hours = parseInt(timeNow[0])
   else hours = parseInt(timeNow[0]+timeNow[1])
   let lengthTime = 24
   for (let i = hours; i < lengthTime+1; i++)

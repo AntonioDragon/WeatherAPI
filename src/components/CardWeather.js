@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import {CardActions} from '@material-ui/core'
 import WavesIcon from '@material-ui/icons/Waves'
 import OpacityIcon from '@material-ui/icons/Opacity'
-import {connect} from 'react-redux'
+import {useSelector} from 'react-redux'
 
 const useStyles = makeStyles((theme)=>({
   root: {
@@ -19,13 +19,15 @@ const useStyles = makeStyles((theme)=>({
   cardContent: {
     padding: 5,
   },
-  icons: {
-    padding: 0,
+  info:{
+    padding: 3,
   },
 }))
 
-const CardWeather = ({weather, index, value}) => {
+const CardWeather = (props) => {
   const classes = useStyles()
+  const {index, value} = props
+  const weather = useSelector(state => state.weather.weather)
 
   return (
     <Card className={classes.root}>
@@ -33,8 +35,8 @@ const CardWeather = ({weather, index, value}) => {
         <CardMedia
           component='img'
           alt='Contemplative Reptile'
-          height='50'
-          image={weather.iconsWeatherHours[index]}
+          height='70'
+          image={weather.weatherHourly[index].iconWether}
           title='Contemplative Reptile'
         />
         <CardContent className={classes.cardContent}>
@@ -46,13 +48,13 @@ const CardWeather = ({weather, index, value}) => {
             {`${Math.trunc(weather.weatherHourly[index].temp)}
              ${weather.metric ? ' ℃': '°F'}`}
           </Typography>
-          <CardActions className={classes.icons} disableSpacing>
+          <CardActions className={classes.info} disableSpacing>
             <OpacityIcon color="primary"/>
             <Typography variant='body2' color='textPrimary' component='p'>
-              {`${weather.weatherHourly[index].pop}%`}
+              {`${Math.trunc(weather.weatherHourly[index].pop * 100)}%`}
             </Typography>
           </CardActions>
-          <CardActions className={classes.icons} disableSpacing>
+          <CardActions className={classes.info} disableSpacing>
             <WavesIcon color="primary"/>
             <Typography variant='body2' color='textPrimary' component='p'>
               {Math.trunc(weather.weatherHourly[index].wind_speed)}
@@ -64,10 +66,4 @@ const CardWeather = ({weather, index, value}) => {
   )
 }
 
-const mapStateToProps = (state) =>{
-  return {
-    weather: state.weather.weather,
-  }
-}
-
-export default connect(mapStateToProps, null)(CardWeather)
+export default CardWeather

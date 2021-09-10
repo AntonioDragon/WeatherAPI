@@ -7,13 +7,13 @@ const validApiHour = (requestApi) =>{
     hourly = errorCreate('Missing data in request'),
   } = requestApi
 
-  if (hourly.length != 48) errorCreate('Missing data in request')
+  if (hourly.length !== 48) errorCreate('Missing data in request')
 
   const validWeather = {
     hourly: [],
   }
 
-  hourly.map((value)=>{
+  hourly.map((value) => {
     const {
       temp = errorCreate('Missing data in request'),
       wind_speed = errorCreate('Missing data in request'),
@@ -30,7 +30,6 @@ const validApiHour = (requestApi) =>{
       weatherId: id,
     })
   })
-
   return validWeather
 }
 

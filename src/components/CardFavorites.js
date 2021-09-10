@@ -6,8 +6,8 @@ import Button from '@material-ui/core/Button'
 import CreateIcon from '@material-ui/icons/Create'
 import DeleteIcon from '@material-ui/icons/Delete'
 import FormDialog from './FormDialog'
-import {connect} from 'react-redux'
-import {addModeOn, changeModeOn, deleteFavoriteCity, fetchWeather} from '../Redux/actions'
+import {useDispatch, useSelector} from 'react-redux'
+import {deleteFavoriteCity, fetchWeather, hideDrawer} from '../redux/actions'
 
 const useStyles = makeStyles((theme) =>({
   root: {
@@ -38,39 +38,21 @@ const useStyles = makeStyles((theme) =>({
 const CardFavorites = (props) => {
   const classes = useStyles()
   const [openFormDialog, setOpenFormDialog] = useState(false)
-
-  const {
-    favorites,
-    value,
-    id,
-    addModeOn,
-    changeModeOn,
-    deleteFavoriteCity,
-    fetchWeather,
-  } = props
+  const dispatch = useDispatch()
+  const favorites = useSelector(state => state.favorites.favorites)
+  const {value, id} = props
 
   const favoriteOpenAddCity = useCallback(
       () => {
-        if (value.content == '+') {
-          addModeOn()
-          setOpenFormDialog(true)
-        } else fetchWeather(value.content)
+        dispatch(hideDrawer())
+        dispatch(fetchWeather(value, favorites))
       },
-      [addModeOn, fetchWeather, value],
+      [value, dispatch, favorites],
   )
-
-  const favoriteChangeCity = useCallback(
-      () => {
-        changeModeOn()
-        setOpenFormDialog(true)
-      },
-      [changeModeOn],
-  )
-
 
   const favoriteDeleteCity = useCallback(
-      () => deleteFavoriteCity(favorites, id),
-      [deleteFavoriteCity, id, favorites],
+      () => dispatch(deleteFavoriteCity(favorites, value)),
+      [value, favorites, dispatch],
   )
 
   return (
@@ -82,37 +64,19 @@ const CardFavorites = (props) => {
       />
       <CardActions>
         <Button
-          onClick={()=>favoriteOpenAddCity()}
+          onClick={favoriteOpenAddCity}
           className={classes.buttonFavorites}
           variant="contained"
           color="primary"
         >
-          {value.content}
+          {value}
         </Button>
-        {
-          value.content != '+' &&
-          <>
-            <CreateIcon onClick={favoriteChangeCity}
-              className={classes.iconCard}/>
-            <DeleteIcon onClick={favoriteDeleteCity}/>
-          </>
-        }
+        <CreateIcon onClick={() => setOpenFormDialog(true)}
+          className={classes.iconCard}/>
+        <DeleteIcon onClick={favoriteDeleteCity}/>
       </CardActions>
     </Card>
   )
 }
 
-const mapDispatchToProps = {
-  addModeOn,
-  changeModeOn,
-  deleteFavoriteCity,
-  fetchWeather,
-}
-
-const mapStateToProps = (state) =>{
-  return {
-    favorites: state.favorites.favorites,
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CardFavorites)
+export default CardFavorites

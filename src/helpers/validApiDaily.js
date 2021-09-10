@@ -13,7 +13,7 @@ const validApiDaily = (requestApi) =>{
     } = errorCreate('Missing data in request'),
   } = requestApi
 
-  if (list.length != 7) errorCreate('Missing data in request')
+  if (list.length !== 7) errorCreate('Missing data in request')
 
   const validWeather = {
     daily: [],
@@ -23,7 +23,7 @@ const validApiDaily = (requestApi) =>{
     },
   }
 
-  list.map((value)=>{
+  list.map((value) => {
     const {
       main: {
         temp_min = errorCreate('Missing data in request'),
@@ -45,7 +45,6 @@ const validApiDaily = (requestApi) =>{
       weatherId: id,
     })
   })
-
   return validWeather
 }
 
