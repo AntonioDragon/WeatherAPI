@@ -32,9 +32,8 @@ export const fetchWeather = (city, favorites) =>{
       }
       const transcriptCity = transformCity(city)
       const {daily, coord} = await validApiDaily(transcriptCity)
-      fetchObj.weatherDaily = iconsWeather(daily, false)
-      const {hourly} = await validApiHour(coord)
-      fetchObj.weatherHourly = iconsWeather(hourly, true)
+      fetchObj.weatherDaily = daily
+      fetchObj.weatherHourly = await validApiHour(coord)
       dispatch({
         type: FETCH_WEATHER,
         payload: fetchObj,

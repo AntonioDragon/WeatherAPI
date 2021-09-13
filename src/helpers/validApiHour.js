@@ -1,3 +1,4 @@
+import iconsWeather from "./iconsWeather"
 import timeDayCheck from "./timeDayCheck"
 
 const validApiHour = async (coord) =>{
@@ -8,7 +9,7 @@ const validApiHour = async (coord) =>{
       return value.json()
     })
     const {hourly} = res
-    return ({
+    const weatherHourly = {
       hourly: hourly.slice(0,24).map((value, index) => {
       const {
         temp,
@@ -28,7 +29,8 @@ const validApiHour = async (coord) =>{
         hourWeek: hoursArr[index]
       }
     })
-  })
+  }
+  return iconsWeather(weatherHourly.hourly, true)
 }
 
 export default validApiHour

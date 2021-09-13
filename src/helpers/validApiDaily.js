@@ -1,4 +1,5 @@
 import daysWeekCheck from "./daysWeekCheck"
+import iconsWeather from "./iconsWeather"
 
 const validApiDaily = async (city) =>{
   const urlkey = process.env.REACT_APP_WEATHER_KEY
@@ -18,7 +19,7 @@ const validApiDaily = async (city) =>{
     }, 
   } = res
 
-  return ({
+  const weatherDaily = {
     coord: {
       lat,
       lon,
@@ -51,8 +52,8 @@ const validApiDaily = async (city) =>{
         dayWeek: daysArr[index]
       }
     })
-
-  })
+  }
+  return {coord: weatherDaily.coord, daily: iconsWeather(weatherDaily.daily, false)}
 }
 
 export default validApiDaily
