@@ -12,26 +12,25 @@ import {fetchWeather, showDrawer} from '../redux/actions'
 import {useDispatch, useSelector} from 'react-redux'
 import useWindowDimensions from '../helpers/getWindowDimensions'
 import MenuIcon from '@material-ui/icons/Menu';
+import { useSnackbar } from 'notistack'
+
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  navbar: {
-    padding: 3,
-  },
-  buttonSearch: {
-    marginLeft: 5,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    display: 'none',
+  appBar: {
     [theme.breakpoints.up('sm')]: {
-      display: 'block',
+      width: `calc(100% - ${240}px)`,
+      marginLeft: 240,
     },
+  },
+  navbar:{
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  logo:{
+    display:'flex',
+  },
+  logoIcon:{
+    marginRight: 5,
   },
   search: {
     position: 'relative',
@@ -87,57 +86,64 @@ const NavBar = () => {
   const favorites = useSelector(state => state.favorites.favorites)
   const dispatch = useDispatch()
   const {width} = useWindowDimensions()
+  const {enqueueSnackbar} = useSnackbar()
 
   const submitHandler = (event) =>{
     event.preventDefault()
-    dispatch(fetchWeather(searchInput, favorites))
+    if(searchInput.trim().length !== 0)
+      dispatch(fetchWeather(searchInput, favorites))
+    else enqueueSnackbar('The submitted data is empty!', {variant: 'warning'})
   }
 
   return (
-    <div className={classes.root}>
-      <AppBar position='static'>
-        <Toolbar className={classes.navbar}>
-          <IconButton
-            edge="start"
-            className={classes.menuIcon}
-            color="inherit"
-            aria-label="open drawer"
-            onClick={()=>dispatch(showDrawer())}
-          >
-            <MenuIcon fontSize='large'/>
-          </IconButton>
-          <WbSunnyIcon/>
-          <Typography className={classes.title} variant='h6' noWrap>
-            Weather
-          </Typography>
-          <form onSubmit={submitHandler} className={classes.formSumbit}>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder='Search City…'
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{'aria-label': 'search'}}
-                onChange={(e) => setSearchInput(e.target.value)}
-              />
+    <AppBar position='fixed' className={classes.appBar}>
+      <Toolbar className={classes.navbar}>
+        <IconButton
+          edge='start'
+          className={classes.menuIcon}
+          color='inherit'
+          aria-label='open drawer'
+          onClick={()=>dispatch(showDrawer())}
+        >
+          <MenuIcon fontSize='large'/>
+        </IconButton>
+        <div className={classes.logo}>
+          <WbSunnyIcon className={classes.logoIcon}/>
+          {
+            (width > 700 || (width < 600 && width > 400)) &&
+            <Typography className={classes.title} variant='h6' noWrap>
+              Weather
+            </Typography>
+          }
+        </div>
+        <form onSubmit={submitHandler} className={classes.formSumbit}>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
             </div>
-            <Button
-              variant='contained'
-              color='primary'
-              className={classes.buttonSearch}
-              endIcon={<SendIcon/>}
-              type='submit'
-            >
-              {width > 600 && 'Search'}
-            </Button>
-          </form>
-        </Toolbar>
-      </AppBar>
-    </div>
+            <InputBase
+              placeholder='Search City…'
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{'aria-label': 'search'}}
+              onChange={(e) => setSearchInput(e.target.value)}
+            />
+          </div>
+          <Button
+            variant='contained'
+            color='primary'
+            className={classes.buttonSearch}
+            endIcon={<SendIcon/>}
+            type='submit'
+          >
+            {width > 700 && 'Search'}
+          </Button>
+        </form>
+      </Toolbar>
+    </AppBar>
+
   )
 }
 

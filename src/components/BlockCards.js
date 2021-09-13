@@ -1,20 +1,20 @@
 import React from 'react'
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import Carousel from 'react-multi-carousel'
+import 'react-multi-carousel/lib/styles.css'
 import CardWeather from './CardWeather'
 import {useSelector} from 'react-redux'
 
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 1300 },
-    items: 15
+    items: 10
   },
   desktop: {
-    breakpoint: { max: 1300, min: 800 },
+    breakpoint: { max: 1300, min: 900 },
     items: 8
   },
   tablet: {
-    breakpoint: { max: 800, min: 540 },
+    breakpoint: { max: 900, min: 540 },
     items: 5
   },
   mobile: {
@@ -23,8 +23,7 @@ const responsive = {
   }
 }
 const BlockCards = () => {
-  const hoursArr = useSelector(state => state.weather.weather.hoursArr)
-   
+  const {weatherHourly} = useSelector(state => state.weather.weather)
 
   return (
     <Carousel 
@@ -34,8 +33,8 @@ const BlockCards = () => {
       transitionDuration={400}
     >
         {
-          hoursArr.map((value, index) =>
-            <CardWeather key={value} value={value} index={index}/>,
+          weatherHourly.map((value) =>
+            <CardWeather key={value.hourWeek} value={value}/>,
           )
         }
     </Carousel>

@@ -1,37 +1,49 @@
 import React from 'react'
-import {makeStyles} from '@material-ui/core/styles'
-import {Paper} from '@material-ui/core'
 import CardFavorites from './CardFavorites'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
+import {IconButton, makeStyles, Paper} from '@material-ui/core'
+import { hideDrawer } from '../redux/actions'
+import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles((theme) => ({
-  buttonFavorites: {
-    margin: 20,
+  headerDrawer: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
-  blockFavorites: {
-    display: 'block',
+  menuIcon:{
     [theme.breakpoints.up('sm')]: {
-      height: 100,
-      display: 'flex',
-      justifyContent: 'start',
+      display: 'none',
     },
   },
 }))
 
 const BlockFavorites = () => {
-  const classes = useStyles()
+  const clasess = useStyles()
   const favorites = useSelector(state => state.favorites.favorites)
+  const dispatch = useDispatch()
   return (
-    <Paper className={classes.blockFavorites} elevation={2}>
-      {
-        favorites.map((value, index)=>
-          <CardFavorites
-            key={index}
-            value={value}
-            id={index}
-          />)
-      }
-    </Paper>
+    <>
+    <div className={clasess.headerDrawer}>
+      <h2>Favorite city</h2>
+      <IconButton
+          edge='start'
+          color='inherit'
+          className={clasess.menuIcon}
+          aria-label='open drawer'
+          onClick={()=>dispatch(hideDrawer())}
+        >
+          <CloseIcon fontSize='large'/>
+      </IconButton>
+    </div>
+    <Paper>
+    {favorites.map((value, index)=>
+      <CardFavorites
+        key={index}
+        value={value}
+        id={index}
+      />)}
+      </Paper>
+    </>
   )
 }
 

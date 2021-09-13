@@ -35,41 +35,43 @@ const ListWeather = () => {
   const classes = useStyles()
   const {width} = useWindowDimensions()
   const {arrDaysWeek, arrDaysWeekMin} = useDaysWeek()
-  const weather = useSelector(state => state.weather.weather)
+  const {weather, metric} = useSelector(state => state.weather)
   return (
     <List dense className={classes.list}>
-      {weather.daysArr.map((value, index) => {
+      {weather.weatherDaily.map((value) => {
         return (
-          <ListItem className={classes.listItem} key={value} button>
+          <ListItem className={classes.listItem} key={value.dayWeek} button>
             <ListItemText
               className={classes.listWeek}
               primary={
                 width > 600 ?
-                arrDaysWeek[value] :
-                arrDaysWeekMin[value]
+                arrDaysWeek[value.dayWeek] :
+                arrDaysWeekMin[value.dayWeek]
               }/>
             <ListItemAvatar>
               <CardMedia
                 component='img'
                 alt='Weather image'
                 height='30'
-                image={weather.weatherDaily[index].iconWether}
+                image={value.iconWether}
                 title='Contemplative Reptile'
                 className ={classes.listImg}
               />
             </ListItemAvatar>
             <ListItemText className={classes.listText} primary={`
-            ${Math.trunc(weather.weatherDaily[index].temp.min)}/
-            ${Math.trunc(weather.weatherDaily[index].temp.max)}
-             ${weather.metric ? ' °C' : '°F'}`
+            ${metric ? Math.trunc(value.temp.min) : 
+              Math.trunc((value.temp.min* 9/5) + 32)}/
+            ${metric ? Math.trunc(value.temp.max) : 
+              Math.trunc((value.temp.min* 9/5) + 32)}
+             ${metric ? ' °C' : '°F'}`
             }/>
-            <OpacityIcon color="primary"/>
+            <OpacityIcon color='primary'/>
             <ListItemText className={classes.listText} primary={
-              `${Math.trunc(weather.weatherDaily[index].pop * 100)}%`
+              `${Math.trunc(value.pop * 100)}%`
             }/>
-            <WavesIcon color="primary"/>
+            <WavesIcon color='primary'/>
             <ListItemText className={classes.listText} primary={
-              `${weather.weatherDaily[index].wind_speed}m/s`
+              `${value.wind_speed}m/s`
             }/>
           </ListItem>
         )

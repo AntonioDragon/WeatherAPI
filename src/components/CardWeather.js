@@ -24,10 +24,9 @@ const useStyles = makeStyles((theme)=>({
   },
 }))
 
-const CardWeather = (props) => {
+const CardWeather = ({value}) => {
   const classes = useStyles()
-  const {index, value} = props
-  const weather = useSelector(state => state.weather.weather)
+  const metric = useSelector(state => state.weather.metric)
 
   return (
     <Card className={classes.root}>
@@ -36,28 +35,28 @@ const CardWeather = (props) => {
           component='img'
           alt='Contemplative Reptile'
           height='70'
-          image={weather.weatherHourly[index].iconWether}
+          image={value.iconWether}
           title='Contemplative Reptile'
         />
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant='h6'>
-            {`${value >= 12 ? value-12 : value}:00 
-            ${value > 12 ? 'am' : 'pm'}`}
+            {`${value.hourWeek >= 12 ? value.hourWeek-12 : value.hourWeek}:00 
+            ${value.hourWeek > 12 ? 'am' : 'pm'}`}
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
-            {`${Math.trunc(weather.weatherHourly[index].temp)}
-             ${weather.metric ? ' ℃': '°F'}`}
+          {`${metric ? Math.trunc(value.temp) : Math.trunc((value.temp * 9/5) + 32)}
+           ${metric ? ' ℃': '°F'}`}
           </Typography>
           <CardActions className={classes.info} disableSpacing>
-            <OpacityIcon color="primary"/>
+            <OpacityIcon color='primary'/>
             <Typography variant='body2' color='textPrimary' component='p'>
-              {`${Math.trunc(weather.weatherHourly[index].pop * 100)}%`}
+              {`${Math.trunc(value.pop * 100)}%`}
             </Typography>
           </CardActions>
           <CardActions className={classes.info} disableSpacing>
-            <WavesIcon color="primary"/>
+            <WavesIcon color='primary'/>
             <Typography variant='body2' color='textPrimary' component='p'>
-              {Math.trunc(weather.weatherHourly[index].wind_speed)}
+              {Math.trunc(value.wind_speed)}
             </Typography>
           </CardActions>
         </CardContent>

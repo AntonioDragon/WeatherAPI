@@ -1,6 +1,5 @@
 import transformCity from '../helpers/transformCity'
-import validApiDaily from '../helpers/validApiDaily'
-import validApiHour from '../helpers/validApiHour'
+import fetchWeatherPost from '../helpers/fetchWeatherPost'
 import timeDayCheck from '../helpers/timeDayCheck'
 import daysWeekCheck from '../helpers/daysWeekCheck'
 import iconsWeather from '../helpers/iconsWeather'
@@ -21,7 +20,6 @@ import {
   HIDE_DRAWER,
   LOADING_FAVORITE_CITY,
 } from './types'
-import addToSessionStorage from '../helpers/addToSessionStorage'
 
 export const fetchWeather = (city, favorites) =>{
   return async dispatch =>{
@@ -29,26 +27,31 @@ export const fetchWeather = (city, favorites) =>{
       dispatch(showLoader())
       const urlkey = process.env.REACT_APP_WEATHER_KEY
       const transcriptCity = transformCity(city)
-      const urlDaily = `https://api.openweathermap.org/data/2.5/forecast?appid=${urlkey}&q=${transcriptCity}&cnt=7&units=metric`
       const hoursArr = timeDayCheck()
       const daysArr = daysWeekCheck()
       const fetchObj = {
         city: city,
-        hoursArr: hoursArr,
-        daysArr: daysArr,
         weatherDaily: [],
         weatherHourly: [],
         metric: true,
       }
-      const responseDailyJson = await fetch(urlDaily)
-      const responseDaily = await responseDailyJson.json()
-      const {daily, coord} = validApiDaily(responseDaily)
-      fetchObj.weatherDaily = iconsWeather(daily, false)
-      const urlHours = `https://api.openweathermap.org/data/2.5/onecall?lat=${coord.lat}&lon=${coord.lon}&exclude=current,minutely,daily,alerts&appid=${urlkey}&units=metric`
-      const responseHoursJson = await fetch(urlHours)
-      const responseHours = await responseHoursJson.json()
-      const {hourly} = validApiHour(responseHours)
-      fetchObj.weatherHourly = iconsWeather(hourly, true, hoursArr)
+      let postDaily
+      const urlDaily = `https://api.openweathermap.org/data/2.5/forecast?appid=${urlkey}&q=${transcriptCity}&cnt=7&units=metric`
+      await fetchWeatherPost(urlDaily, true).then((value) => {
+        postDaily = value
+      }).catch((error) => {
+        throw new Error(error.message)
+      })
+      fetchObj.weatherDaily = iconsWeather(postDaily.daily, false, daysArr)
+      const urlHours = `https://api.openweathermap.org/data/2.5/onecall?lat=${postDaily.coord.lat}&lon=${postDaily.coord.lon}&exclude=current,minutely,daily,alerts&appid=${urlkey}&units=metric`
+      let postHourly
+      await fetchWeatherPost(urlHours, false).then((value) => {
+        postHourly = value.hourly
+      }).catch((error) => {
+        throw new Error(error.message)
+      })
+      const tempWeather = postHourly.slice(0,24)
+      fetchObj.weatherHourly = iconsWeather(tempWeather, true, hoursArr)
       dispatch({
         type: FETCH_WEATHER,
         payload: fetchObj,
@@ -58,88 +61,21 @@ export const fetchWeather = (city, favorites) =>{
       else dispatch(openCityNotFavorite())
       dispatch(hideLoader())
     } catch (error) {
+      dispatch(hideLoader())
       dispatch(showAlert(error.message))
     }
+      
   }
 }
 
-export const metricStateToFahrenheit = (state) => {
-  const transformObj = {
-    city: state.city,
-    hoursArr: state.hoursArr,
-    daysArr: state.daysArr,
-    iconsWeatherHours: state.iconsWeatherHours,
-    iconsWeatherDaily: state.iconsWeatherDaily,
-    weatherDaily: state.weatherDaily,
-    weatherHourly: state.weatherHourly,
-    metric: false,
-  }
-  for (const value of transformObj.weatherDaily) {
-    value.temp.min = (value.temp.min * 9/5) + 32
-    value.temp.max = (value.temp.max * 9/5) + 32
-  }
-  for (const value of transformObj.weatherHourly)
-    value.temp = (value.temp * 9/5) + 32
-  return ({
-    type: TRANSFORM_F_WEATHER,
-    payload: transformObj,
-  })
-}
+export const metricStateToFahrenheit = () => ({type: TRANSFORM_F_WEATHER})
+export const metricStateToCelsius= () => ({type: TRANSFORM_C_WEATHER})
 
-export const metricStateToCelsius= (state) => {
-  const transformObj = {
-    city: state.city,
-    hoursArr: state.hoursArr,
-    daysArr: state.daysArr,
-    iconsWeatherHours: state.iconsWeatherHours,
-    iconsWeatherDaily: state.iconsWeatherDaily,
-    weatherDaily: state.weatherDaily,
-    weatherHourly: state.weatherHourly,
-    metric: true,
-  }
-  for (const value of transformObj.weatherDaily) {
-    value.temp.min = (value.temp.min - 32) * 5/9
-    value.temp.max = (value.temp.max - 32) * 5/9
-  }
-  for (const value of transformObj.weatherHourly)
-    value.temp = (value.temp - 32) * 5/9
-  return ({
-    type: TRANSFORM_C_WEATHER,
-    payload: transformObj,
-  })
-}
-
-export const addFavoriteCity = (state, element) => {
-  const transformArr = state.concat(element)
-  addToSessionStorage(transformArr)
-  openCityFavorite()
-  return ({
-    type: ADD_FAVORITE_CITY,
-    payload: transformArr,
-  })
-}
-
-export const changeFavoriteCity = (state, index, element) => {
-  const transformArr = state.concat()
-  transformArr[index] = element
-  addToSessionStorage(transformArr)
-  return ({
-    type: CHANGE_FAVORITE_CITY,
-    payload: transformArr,
-  })
-}
-
-export const deleteFavoriteCity = (state, city) => {
-  const transformArr = state.concat()
-  const index = transformArr.indexOf(city)
-  transformArr.splice(index, 1)
-  addToSessionStorage(transformArr)
-  return ({
-    type: DELETE_FAVORITE_CITY,
-    payload: transformArr,
-  })
-}
-
+export const addFavoriteCity = (element) => ({type: ADD_FAVORITE_CITY, payload: element})
+export const changeFavoriteCity = (index, element) =>{
+  return ({type: CHANGE_FAVORITE_CITY, payload: {index, element}})
+} 
+export const deleteFavoriteCity = (city) =>({type: DELETE_FAVORITE_CITY, payload: city})
 export const loadFavoriteCities = (post) => ({type: LOADING_FAVORITE_CITY, payload: post})
 
 export const showDrawer = () => ({type: SHOW_DRAWER})

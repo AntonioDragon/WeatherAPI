@@ -7,46 +7,51 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {useDispatch, useSelector} from 'react-redux'
-import {changeFavoriteCity} from '../redux/actions'
+import {changeFavoriteCity, openCityFavorite, openCityNotFavorite} from '../redux/actions'
+
 
 const FormDialog = (props) => {
   const [newFavorite, setNewFavorite] = useState('')
   const dispatch = useDispatch()
   const {open, idCardFavorite, setOpenFormDialog} = props
   const favorites = useSelector(state => state.favorites.favorites)
+  const city = useSelector(state => state.weather.weather.city)
 
   const enterCity = useCallback(
     () => {
-      dispatch(changeFavoriteCity(favorites, idCardFavorite, newFavorite))
+      dispatch(changeFavoriteCity(idCardFavorite, newFavorite))
+      if(city !== 'Missing' && favorites.find((value)=> value === city))
+         dispatch(openCityFavorite())
+      else dispatch(openCityNotFavorite())
       setOpenFormDialog(false)
     },
-    [dispatch, favorites, idCardFavorite, setOpenFormDialog, newFavorite],
+    [idCardFavorite, setOpenFormDialog, newFavorite, city, favorites],
   )
 
   return (
     <div>
       <Dialog open={open}
         onClose={()=>setOpenFormDialog(false)}
-        aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Favorite City</DialogTitle>
+        aria-labelledby='form-dialog-title'>
+        <DialogTitle id='form-dialog-title'>Favorite City</DialogTitle>
         <DialogContent>
           <DialogContentText>
            Enter the name of the city
           </DialogContentText>
           <TextField
             autoFocus
-            margin="dense"
-            id="name"
+            margin='dense'
+            id='name'
             fullWidth
             defaultValue={favorites[idCardFavorite]}
             onChange={(e)=>setNewFavorite(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>setOpenFormDialog(false)} color="primary">
+          <Button onClick={()=>setOpenFormDialog(false)} color='primary'>
             Cancel
           </Button>
-          <Button onClick={enterCity} color="primary">
+          <Button onClick={enterCity} color='primary'>
             Enter
           </Button>
         </DialogActions>

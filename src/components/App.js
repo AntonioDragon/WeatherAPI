@@ -1,111 +1,103 @@
-import React, { useCallback, useEffect } from 'react'
-import {CircularProgress, IconButton, makeStyles, Paper} from '@material-ui/core'
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import StarIcon from '@material-ui/icons/Star';
+import React, {useEffect} from 'react'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Drawer from '@material-ui/core/Drawer'
+import Hidden from '@material-ui/core/Hidden'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { useSnackbar } from 'notistack'
+import { useDispatch, useSelector } from 'react-redux'
+import {hideAlert, hideDrawer, loadFavoriteCities} from '../redux/actions'
 import NavBar from './NavBar'
-import BlockCards from './BlockCards'
-import ListWeather from './List'
 import BlockFavorites from './BlockFavorites'
-import BlockRadio from './BlockRadio'
-import {useDispatch, useSelector} from 'react-redux'
-import DrawerFavorite from './DrawerFavorite'
-import { addFavoriteCity, deleteFavoriteCity, loadFavoriteCities, openCityFavorite, openCityNotFavorite } from '../redux/actions';
+import addToSessionStorage from '../helpers/addToSessionStorage'
+import AppContent from './AppContent'
 
 const useStyles = makeStyles((theme) => ({
-  title: {
+  root: {
     display: 'flex',
-    margin: 30,
   },
-  wetherInfoDays: {
-    padding: 10,
-  },
-  errorOutput: {
-    color: 'red',
-  },
-  loading: {
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-  },
-  blockFavorites: {
-    display: 'none',
+  drawer: {
     [theme.breakpoints.up('sm')]: {
-      display: 'block',
+      width: 240,
+      flexShrink: 0,
     },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: 240,
+  },
+  content: {
+    flexGrow: 1,
+    padding: 10,
   },
 }))
 
-
-const App = () => {
+function ResponsiveDrawer() {
   const classes = useStyles()
+  const theme = useTheme()
   const dispatch = useDispatch()
-  const city = useSelector(state => state.weather.weather.city)
-  const {alert, loading} = useSelector(state => state.app)
-  const {cityOpenFavorite, favorites} = useSelector(state => state.favorites)
+  const {alert, drawer} = useSelector(state => state.app)
+  const {favorites} = useSelector(state => state.favorites)
+  const {enqueueSnackbar} = useSnackbar()
 
-  
   useEffect(() => {
-    if(sessionStorage.hasOwnProperty('ArrayFavorite')){
-      dispatch(loadFavoriteCities(JSON.parse(sessionStorage.getItem('ArrayFavorite'))))
-    }
-  }, [dispatch])
+       if(sessionStorage.hasOwnProperty('ArrayFavorite')){
+         dispatch(loadFavoriteCities(JSON.parse(sessionStorage.getItem('ArrayFavorite'))))
+       }
+     }, [])
 
+  useEffect(() => {
+    if(alert !== 'Missing')
+      enqueueSnackbar(`${alert}! Please try to double-check the entered city`, {variant: 'warning'})
+    return () => dispatch(hideAlert())
+  }, [alert])
 
-  const favoriteToggleClick = useCallback(
-    () => {
-      if (cityOpenFavorite) {
-        dispatch(openCityNotFavorite())
-        dispatch(deleteFavoriteCity(favorites, city))
-      } else {
-        dispatch(openCityFavorite())
-        dispatch(addFavoriteCity(favorites, city))
-      }
-    },
-    [dispatch, cityOpenFavorite, favorites, city],
-  )
+  useEffect(() => {
+    if(favorites.length !== 0)
+      addToSessionStorage(favorites)
+  }, [favorites])
 
   return (
     <>
-      <DrawerFavorite/>
+      <CssBaseline />
       <NavBar/>
-      {alert === 'Missing' ? (
-        (loading) ? <CircularProgress className={classes.loading}/> :
-        (city !== 'Missing') && (
-          <>
-            <div className={classes.title}>
-              <h1>{city}</h1>
-              <IconButton
-                edge="start"
-                className={classes.menuIcon}
-                color="inherit"
-                aria-label="open drawer"
-                onClick={favoriteToggleClick}
-              >
-                {cityOpenFavorite ? <StarIcon/> : <StarBorderIcon/>}
-              </IconButton>
-            </div>
-            <BlockRadio/>
-            <Paper className={classes.wetherInfoDays} elevation={3}>
-              <Paper className={classes.wetherInfoTodayTime} elevation={3}>
-                <ListWeather />
-              </Paper>
-              <BlockCards />
-            </Paper>
-          </>
-        )
-       ) : (
-         <div>
-         <p> Please try to double-check the entered city or try again later</p>
-         <p>{alert}</p>
-         </div>
-        
-      )}
-      <div className={classes.blockFavorites}>
-        <h2>Favorites city</h2>
-        <BlockFavorites  />
-      </div>
+      <nav className={classes.drawer} aria-label='favorites city'>
+        <Hidden smUp implementation='css'>
+          <Drawer
+            variant='temporary'
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={drawer}
+            onClose={()=>dispatch(hideDrawer())}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true,
+            }}
+          >
+           <BlockFavorites/>
+          </Drawer>
+        </Hidden>
+        <Hidden xsDown implementation='css'>
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant='permanent'
+            open
+          >
+            <BlockFavorites/>
+          </Drawer>
+        </Hidden>
+      </nav>
+      <AppContent/>
     </>
   )
 }
 
-export default App
+export default ResponsiveDrawer

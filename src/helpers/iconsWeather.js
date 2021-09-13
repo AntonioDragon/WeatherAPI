@@ -1,17 +1,21 @@
-const iconsWeather = (weather, outputIllation, timesDay) => {
+const iconsWeather = (weather, outputIllation, arrDaysHour) => {
   const size = outputIllation ? '100x50': '60x50'
-  if (outputIllation)
+  if (outputIllation){
     for (let key = 0; key < 24; key++) {
+      weather[key].hourWeek = arrDaysHour[key]
       weather[key].iconWether =
         designationIconWeather(
-              weather[key], timesDay, key, size, outputIllation)
+          weather[key], arrDaysHour, key, size, outputIllation)
     }
+  }
   else
     for (let key = 0; key < 7; key++) {
+      weather[key].dayWeek = arrDaysHour[key]
       weather[key].iconWether = 
         designationIconWeather(
-              weather[key], timesDay, key, size, outputIllation)
+              weather[key], arrDaysHour, key, size, outputIllation)
     }
+  
   return weather
 }
 
@@ -20,27 +24,27 @@ const designationIconWeather = (weather, timesDay, key, size, outputIllation) =>
   if (outputIllation) {
     if (
       weather.weatherId === 800 &&
-      (timesDay[key] <= 20 && timesDay[key] >= 5)
+      (weather.hourWeek <= 20 && weather.hourWeek >= 5)
     )
       return `${standartPathToImage}${size}/Weather3_${size}.svg`
     if (
       weather.weatherId === 800 &&
-      ((timesDay[key] > 20 || timesDay[key] <= 24) &&
-        timesDay[key] >= 0 && timesDay[key] < 5)
+      ((weather.hourWeek > 20 || weather.hourWeek <= 24) &&
+        weather.hourWeek >= 0 && weather.hourWeek < 5)
     )
       return `${standartPathToImage}${size}/Weather9_${size}.svg`
     if (
       (weather.weatherId === 801 ||
           weather.weatherId === 802) &&
-        timesDay[key] <= 20 &&
-        timesDay[key] >= 5
+        weather.hourWeek <= 20 &&
+        weather.hourWeek >= 5
     )
       return `${standartPathToImage}${size}/Weather1_${size}.svg`
     if (
       (weather.weatherId === 801 ||
           weather.weatherId === 802) &&
-          ((timesDay[key] > 20 || timesDay[key] <= 24) &&
-            timesDay[key] >= 0 && timesDay[key] < 5)
+          ((weather.hourWeek > 20 || weather.hourWeek <= 24) &&
+            weather.hourWeek >= 0 && weather.hourWeek < 5)
     )
       return `${standartPathToImage}${size}/Weather10_${size}.svg`
   } else {

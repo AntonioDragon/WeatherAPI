@@ -17,11 +17,16 @@ export const favoritesReducer = (state = initialState, action) => {
     case LOADING_FAVORITE_CITY:
       return {...state, favorites: action.payload}
     case ADD_FAVORITE_CITY:
-      return {...state, favorites: action.payload}
-    case CHANGE_FAVORITE_CITY:
-      return {...state, favorites: action.payload}
-    case DELETE_FAVORITE_CITY:
-      return {...state, favorites: action.payload}
+      return {...state, favorites: state.favorites.concat(action.payload)}
+    case CHANGE_FAVORITE_CITY: {
+      const transformArr = state.favorites.concat()
+      transformArr[action.payload.index] = action.payload.element
+      return {...state, favorites: transformArr}
+    }
+    case DELETE_FAVORITE_CITY: {
+      state.favorites.splice(state.favorites.indexOf(action.payload), 1)
+      return {...state, favorites: state.favorites}
+    } 
     case CITY_OPEN_FAVORITE: 
       return {...state, cityOpenFavorite: true}
     case CITY_OPEN_NOT_FAVORITE: 
