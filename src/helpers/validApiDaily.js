@@ -1,51 +1,58 @@
-const validApiDaily = (requestApi) =>{
-  const errorCreate = (message) =>{
-    throw new Error(`Api value error : ${message}`)
-  }
+import daysWeekCheck from "./daysWeekCheck"
 
+const validApiDaily = async (city) =>{
+  const urlkey = process.env.REACT_APP_WEATHER_KEY
+  const daysArr = daysWeekCheck()
+  const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?appid=${urlkey}&q=${city}&cnt=7&units=metric`)
+    .then((value) => {
+      return value.json()
+    })
+  
   const {
-    list = errorCreate('Missing data in request'),
+    list, 
     city: {
       coord: {
-        lat = errorCreate('Missing data in request'),
-        lon = errorCreate('Missing data in request'),
-      } = errorCreate('Missing data in request'),
-    } = errorCreate('Missing data in request'),
-  } = requestApi
+        lat,
+        lon
+      }, 
+    }, 
+  } = res
 
-  if (list.length !== 7) errorCreate('Missing data in request')
-
-  const validWeather = {
-    daily: [],
+  return ({
     coord: {
-      lat: lat,
-      lon: lon,
+      lat,
+      lon,
     },
-  }
+    daily: list.map((item, index)=>{
+      const {
+        main: {
+          temp_min,
+          temp_max,
+        },
+        wind: {
+          speed
+        },
+        pop,
+        weather: [
+          {
+            id: weatherId,
+          },
+        ],
+      } = item
 
-  list.map((value) => {
-    const {
-      main: {
-        temp_min = errorCreate('Missing data in request'),
-        temp_max = errorCreate('Missing data in request'),
-      } = errorCreate('Missing data in request'),
-      wind: {
-        speed = errorCreate('Missing data in request'),
-      } = errorCreate('Missing data in request'),
-      pop = errorCreate('Missing data in request'),
-      weather: [
-        {
-          id = errorCreate('Missing data in request'),
-        } = errorCreate('Missing data in request'),
-      ] = errorCreate('Missing data in request')} = value
-    validWeather.daily.push({
-      temp: {min: temp_min, max: temp_max},
-      pop: pop,
-      wind_speed: speed,
-      weatherId: id,
+      return {
+        temp: {
+          min: temp_min,
+          max: temp_max,
+        },
+        wind_speed: speed,
+        pop,
+        weatherId,
+        dayWeek: daysArr[index]
+      }
     })
+
   })
-  return validWeather
 }
 
 export default validApiDaily

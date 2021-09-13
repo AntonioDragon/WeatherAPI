@@ -17,10 +17,7 @@ import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${240}px)`,
-      marginLeft: 240,
-    },
+    zIndex: theme.zIndex.drawer + 1,
   },
   navbar:{
     display: 'flex',
@@ -110,7 +107,7 @@ const NavBar = () => {
         <div className={classes.logo}>
           <WbSunnyIcon className={classes.logoIcon}/>
           {
-            (width > 700 || (width < 600 && width > 400)) &&
+            (width > 600) &&
             <Typography className={classes.title} variant='h6' noWrap>
               Weather
             </Typography>

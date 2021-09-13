@@ -1,36 +1,34 @@
-const validApiHour = (requestApi) =>{
-  const errorCreate = (message) =>{
-    throw new Error(`Api value error : ${message}`)
-  }
+import timeDayCheck from "./timeDayCheck"
 
-  const {
-    hourly = errorCreate('Missing data in request'),
-  } = requestApi
-
-  if (hourly.length !== 48) errorCreate('Missing data in request')
-
-  const validWeather = {
-    hourly: [],
-  }
-
-  hourly.map((value) => {
-    const {
-      temp = errorCreate('Missing data in request'),
-      wind_speed = errorCreate('Missing data in request'),
-      pop = errorCreate('Missing data in request'),
-      weather: [
-        {
-          id = errorCreate('Missing data in request'),
-        } = errorCreate('Missing data in request'),
-      ] = errorCreate('Missing data in request')} = value
-    validWeather.hourly.push({
-      temp: temp,
-      pop: pop,
-      wind_speed: wind_speed,
-      weatherId: id,
+const validApiHour = async (coord) =>{
+  const urlkey = process.env.REACT_APP_WEATHER_KEY
+  const hoursArr = timeDayCheck()
+  const res = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${coord.lat}&lon=${coord.lon}&exclude=current,minutely,daily,alerts&appid=${urlkey}&units=metric`)
+    .then((value) => {
+      return value.json()
+    })
+    const {hourly} = res
+    return ({
+      hourly: hourly.slice(0,24).map((value, index) => {
+      const {
+        temp,
+        wind_speed,
+        pop,
+        weather: [
+          {
+            id,
+          },
+        ]
+      } = value
+      return {
+        temp,
+        pop,
+        wind_speed,
+        weatherId: id,
+        hourWeek: hoursArr[index]
+      }
     })
   })
-  return validWeather
 }
 
 export default validApiHour

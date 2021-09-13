@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
   headerDrawer: {
     display: 'flex',
     justifyContent: 'space-between',
+    [theme.breakpoints.up('sm')]: {
+      marginTop: 70,
+    },
   },
   menuIcon:{
     [theme.breakpoints.up('sm')]: {

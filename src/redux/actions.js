@@ -1,7 +1,4 @@
 import transformCity from '../helpers/transformCity'
-import fetchWeatherPost from '../helpers/fetchWeatherPost'
-import timeDayCheck from '../helpers/timeDayCheck'
-import daysWeekCheck from '../helpers/daysWeekCheck'
 import iconsWeather from '../helpers/iconsWeather'
 import {
   FETCH_WEATHER,
@@ -20,38 +17,24 @@ import {
   HIDE_DRAWER,
   LOADING_FAVORITE_CITY,
 } from './types'
+import validApiDaily from '../helpers/validApiDaily'
+import validApiHour from '../helpers/validApiHour'
 
 export const fetchWeather = (city, favorites) =>{
   return async dispatch =>{
     try {
       dispatch(showLoader())
-      const urlkey = process.env.REACT_APP_WEATHER_KEY
-      const transcriptCity = transformCity(city)
-      const hoursArr = timeDayCheck()
-      const daysArr = daysWeekCheck()
       const fetchObj = {
         city: city,
         weatherDaily: [],
         weatherHourly: [],
         metric: true,
       }
-      let postDaily
-      const urlDaily = `https://api.openweathermap.org/data/2.5/forecast?appid=${urlkey}&q=${transcriptCity}&cnt=7&units=metric`
-      await fetchWeatherPost(urlDaily, true).then((value) => {
-        postDaily = value
-      }).catch((error) => {
-        throw new Error(error.message)
-      })
-      fetchObj.weatherDaily = iconsWeather(postDaily.daily, false, daysArr)
-      const urlHours = `https://api.openweathermap.org/data/2.5/onecall?lat=${postDaily.coord.lat}&lon=${postDaily.coord.lon}&exclude=current,minutely,daily,alerts&appid=${urlkey}&units=metric`
-      let postHourly
-      await fetchWeatherPost(urlHours, false).then((value) => {
-        postHourly = value.hourly
-      }).catch((error) => {
-        throw new Error(error.message)
-      })
-      const tempWeather = postHourly.slice(0,24)
-      fetchObj.weatherHourly = iconsWeather(tempWeather, true, hoursArr)
+      const transcriptCity = transformCity(city)
+      const {daily, coord} = await validApiDaily(transcriptCity)
+      fetchObj.weatherDaily = iconsWeather(daily, false)
+      const {hourly} = await validApiHour(coord)
+      fetchObj.weatherHourly = iconsWeather(hourly, true)
       dispatch({
         type: FETCH_WEATHER,
         payload: fetchObj,
@@ -59,11 +42,11 @@ export const fetchWeather = (city, favorites) =>{
       if(favorites.find((value)=> value === city)) 
         dispatch(openCityFavorite())
       else dispatch(openCityNotFavorite())
-      dispatch(hideLoader())
-    } catch (error) {
-      dispatch(hideLoader())
-      dispatch(showAlert(error.message))
-    }
+        dispatch(hideLoader())
+     } catch (error) {
+       dispatch(hideLoader())
+       dispatch(showAlert(error.message))
+     }
       
   }
 }

@@ -1,25 +1,23 @@
-const iconsWeather = (weather, outputIllation, arrDaysHour) => {
+const iconsWeather = (weather, outputIllation) => {
   const size = outputIllation ? '100x50': '60x50'
   if (outputIllation){
     for (let key = 0; key < 24; key++) {
-      weather[key].hourWeek = arrDaysHour[key]
       weather[key].iconWether =
         designationIconWeather(
-          weather[key], arrDaysHour, key, size, outputIllation)
+          weather[key], size, outputIllation)
     }
   }
   else
     for (let key = 0; key < 7; key++) {
-      weather[key].dayWeek = arrDaysHour[key]
       weather[key].iconWether = 
         designationIconWeather(
-              weather[key], arrDaysHour, key, size, outputIllation)
+              weather[key], size, outputIllation)
     }
   
   return weather
 }
 
-const designationIconWeather = (weather, timesDay, key, size, outputIllation) => {
+const designationIconWeather = (weather, size, outputIllation) => {
   const standartPathToImage = '../../weather'
   if (outputIllation) {
     if (
