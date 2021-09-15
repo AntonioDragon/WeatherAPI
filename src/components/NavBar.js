@@ -5,30 +5,32 @@ import Typography from '@material-ui/core/Typography'
 import InputBase from '@material-ui/core/InputBase'
 import {alpha, makeStyles} from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
-import SendIcon from '@material-ui/icons/Send';
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import SendIcon from '@material-ui/icons/Send'
+import WbSunnyIcon from '@material-ui/icons/WbSunny'
 import {Button, IconButton} from '@material-ui/core'
-import {fetchWeather, showDrawer} from '../redux/actions'
-import {useDispatch, useSelector} from 'react-redux'
+import {showDrawer} from '../redux/actions'
+import {useDispatch} from 'react-redux'
 import useWindowDimensions from '../helpers/getWindowDimensions'
-import MenuIcon from '@material-ui/icons/Menu';
-import { useSnackbar } from 'notistack'
-
+import MenuIcon from '@material-ui/icons/Menu'
+import {useSnackbar} from 'notistack'
+import {useHistory} from 'react-router-dom'
+import transformCity from '../helpers/transformCity'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
   },
-  navbar:{
+  navbar: {
     display: 'flex',
     justifyContent: 'space-between',
   },
-  logo:{
-    display:'flex',
+  logo: {
+    display: 'flex',
+    '&:hover': {
+      borderRadius: 0,
+    },
   },
-  logoIcon:{
-    marginRight: 5,
-  },
+
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -70,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   formSumbit: {
     display: 'flex',
   },
-  menuIcon:{
+  menuIcon: {
     [theme.breakpoints.up('sm')]: {
       display: 'none',
     },
@@ -80,16 +82,17 @@ const useStyles = makeStyles((theme) => ({
 const NavBar = () => {
   const classes = useStyles()
   const [searchInput, setSearchInput] = useState('')
-  const favorites = useSelector(state => state.favorites.favorites)
   const dispatch = useDispatch()
   const {width} = useWindowDimensions()
   const {enqueueSnackbar} = useSnackbar()
-
-  const submitHandler = (event) =>{
+  const history = useHistory()
+  const submitHandler = (event) => {
     event.preventDefault()
-    if(searchInput.trim().length !== 0)
-      dispatch(fetchWeather(searchInput, favorites))
-    else enqueueSnackbar('The submitted data is empty!', {variant: 'warning'})
+    if (searchInput.trim().length !== 0) {
+      const transcriptCity = transformCity(searchInput)
+      history.push(`${transcriptCity}`, searchInput)
+    } else
+      enqueueSnackbar('The submitted data is empty!', { variant: 'warning' })
   }
 
   return (
@@ -100,19 +103,25 @@ const NavBar = () => {
           className={classes.menuIcon}
           color='inherit'
           aria-label='open drawer'
-          onClick={()=>dispatch(showDrawer())}
+          onClick={() => dispatch(showDrawer())}
         >
-          <MenuIcon fontSize='large'/>
+          <MenuIcon fontSize='large' />
         </IconButton>
-        <div className={classes.logo}>
-          <WbSunnyIcon className={classes.logoIcon}/>
-          {
-            (width > 600) &&
+        <IconButton
+          edge='start'
+          className={classes.logo}
+          color='inherit'
+          aria-label='open drawer'
+          style={{ backgroundColor: 'transparent' }}
+          href={`/`}
+        >
+          <WbSunnyIcon />
+          {width > 600 && (
             <Typography className={classes.title} variant='h6' noWrap>
               Weather
             </Typography>
-          }
-        </div>
+          )}
+        </IconButton>
         <form onSubmit={submitHandler} className={classes.formSumbit}>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -124,7 +133,7 @@ const NavBar = () => {
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              inputProps={{'aria-label': 'search'}}
+              inputProps={{ 'aria-label': 'search' }}
               onChange={(e) => setSearchInput(e.target.value)}
             />
           </div>
@@ -132,7 +141,7 @@ const NavBar = () => {
             variant='contained'
             color='primary'
             className={classes.buttonSearch}
-            endIcon={<SendIcon/>}
+            endIcon={<SendIcon />}
             type='submit'
           >
             {width > 700 && 'Search'}
@@ -140,7 +149,6 @@ const NavBar = () => {
         </form>
       </Toolbar>
     </AppBar>
-
   )
 }
 

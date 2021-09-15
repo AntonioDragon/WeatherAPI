@@ -1,29 +1,32 @@
 import {makeStyles, Switch} from '@material-ui/core'
 import React, {useCallback, useState} from 'react'
-import {useDispatch} from 'react-redux'
-import {metricStateToFahrenheit, metricStateToCelsius} from '../redux/actions'
-const useStyles = makeStyles((theme) =>({
+import {useDispatch } from 'react-redux'
+import {
+  metricStateToFahrenheit,
+  metricStateToCelsius,
+} from '../redux/actions'
+
+const useStyles = makeStyles((theme) => ({
   root: {
-    margin: 10, 
+    margin: 10,
   },
-}));
+}))
 
 const BlockRadio = () => {
   const classes = useStyles()
   const [selectedValue, setSelectedValue] = useState(false)
   const dispatch = useDispatch()
-  const handleChange = useCallback(
-      () => {
-        if (selectedValue){
-          dispatch(metricStateToCelsius())
-          setSelectedValue(false)
-        } else {
-          dispatch(metricStateToFahrenheit())
-          setSelectedValue(true)
-        }
-      },
-      [selectedValue],
-  )
+
+  const handleChange = useCallback(() => {
+    if (selectedValue) {
+      dispatch(metricStateToCelsius())
+      setSelectedValue(false)
+    } else {
+      dispatch(metricStateToFahrenheit())
+      setSelectedValue(true)
+    }
+  }, [selectedValue])
+  
   return (
     <div className={classes.root}>
       <span>°C</span>

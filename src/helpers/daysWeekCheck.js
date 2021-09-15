@@ -1,6 +1,6 @@
 import getDay from 'date-fns/getDay'
 
-const daysWeekCheck = () =>{
+const daysWeekCheck = () => {
   const dayWeek = getDay(new Date())
   let lengthWeek = 7
   const newArrWeekDays = []

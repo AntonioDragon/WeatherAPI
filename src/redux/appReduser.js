@@ -1,4 +1,11 @@
-import {HIDE_ALERT, HIDE_DRAWER, HIDE_LOADER, SHOW_ALERT, SHOW_DRAWER, SHOW_LOADER} from './types'
+import {
+  HIDE_ALERT,
+  HIDE_DRAWER,
+  HIDE_LOADER,
+  SHOW_ALERT,
+  SHOW_DRAWER,
+  SHOW_LOADER,
+} from './types'
 
 const initialState = {
   loading: false,

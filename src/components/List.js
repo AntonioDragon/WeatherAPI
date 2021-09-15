@@ -30,12 +30,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-
 const ListWeather = () => {
   const classes = useStyles()
   const {width} = useWindowDimensions()
   const {arrDaysWeek, arrDaysWeekMin} = useDaysWeek()
-  const {weather, metric} = useSelector(state => state.weather)
+  const {weather, metric} = useSelector((state) => state.weather)
   return (
     <List dense className={classes.list}>
       {weather.weatherDaily.map((value) => {
@@ -44,10 +43,11 @@ const ListWeather = () => {
             <ListItemText
               className={classes.listWeek}
               primary={
-                width > 600 ?
-                arrDaysWeek[value.dayWeek] :
-                arrDaysWeekMin[value.dayWeek]
-              }/>
+                width > 600
+                  ? arrDaysWeek[value.dayWeek]
+                  : arrDaysWeekMin[value.dayWeek]
+              }
+            />
             <ListItemAvatar>
               <CardMedia
                 component='img'
@@ -55,24 +55,34 @@ const ListWeather = () => {
                 height='30'
                 image={value.iconWether}
                 title='Contemplative Reptile'
-                className ={classes.listImg}
+                className={classes.listImg}
               />
             </ListItemAvatar>
-            <ListItemText className={classes.listText} primary={`
-            ${metric ? Math.trunc(value.temp.min) : 
-              Math.trunc((value.temp.min* 9/5) + 32)}/
-            ${metric ? Math.trunc(value.temp.max) : 
-              Math.trunc((value.temp.min* 9/5) + 32)}
-             ${metric ? ' °C' : '°F'}`
-            }/>
-            <OpacityIcon color='primary'/>
-            <ListItemText className={classes.listText} primary={
-              `${Math.trunc(value.pop * 100)}%`
-            }/>
-            <WavesIcon color='primary'/>
-            <ListItemText className={classes.listText} primary={
-              `${value.wind_speed}m/s`
-            }/>
+            <ListItemText
+              className={classes.listText}
+              primary={`
+            ${
+              metric
+                ? Math.trunc(value.temp.min)
+                : Math.trunc((value.temp.min * 9) / 5 + 32)
+            }/
+            ${
+              metric
+                ? Math.trunc(value.temp.max)
+                : Math.trunc((value.temp.min * 9) / 5 + 32)
+            }
+             ${metric ? ' °C' : '°F'}`}
+            />
+            <OpacityIcon color='primary' />
+            <ListItemText
+              className={classes.listText}
+              primary={`${Math.trunc(value.pop * 100)}%`}
+            />
+            <WavesIcon color='primary' />
+            <ListItemText
+              className={classes.listText}
+              primary={`${value.wind_speed}m/s`}
+            />
           </ListItem>
         )
       })}

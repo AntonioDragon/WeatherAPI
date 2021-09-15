@@ -2,7 +2,7 @@ import React from 'react'
 import CardFavorites from './CardFavorites'
 import {useDispatch, useSelector} from 'react-redux'
 import {IconButton, makeStyles, Paper} from '@material-ui/core'
-import { hideDrawer } from '../redux/actions'
+import {hideDrawer} from '../redux/actions'
 import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles((theme) => ({
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: 70,
     },
   },
-  menuIcon:{
+  menuIcon: {
     [theme.breakpoints.up('sm')]: {
       display: 'none',
     },
@@ -22,33 +22,29 @@ const useStyles = makeStyles((theme) => ({
 
 const BlockFavorites = () => {
   const clasess = useStyles()
-  const favorites = useSelector(state => state.favorites.favorites)
+  const favorites = useSelector((state) => state.favorites.favorites)
   const dispatch = useDispatch()
   return (
     <>
-    <div className={clasess.headerDrawer}>
-      <h2>Favorite city</h2>
-      <IconButton
+      <div className={clasess.headerDrawer}>
+        <h2>Favorite city</h2>
+        <IconButton
           edge='start'
           color='inherit'
           className={clasess.menuIcon}
           aria-label='open drawer'
-          onClick={()=>dispatch(hideDrawer())}
+          onClick={() => dispatch(hideDrawer())}
         >
-          <CloseIcon fontSize='large'/>
-      </IconButton>
-    </div>
-    <Paper>
-    {favorites.map((value, index)=>
-      <CardFavorites
-        key={index}
-        value={value}
-        id={index}
-      />)}
+          <CloseIcon fontSize='large' />
+        </IconButton>
+      </div>
+      <Paper>
+        {favorites.map((value, index) => (
+          <CardFavorites key={index} value={value} id={index} />
+        ))}
       </Paper>
     </>
   )
 }
 
 export default BlockFavorites
-

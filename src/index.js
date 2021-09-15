@@ -9,16 +9,19 @@ import {compose, createStore, applyMiddleware} from 'redux'
 import {rootReducer} from './redux/rootReducer'
 import { SnackbarProvider } from 'notistack';
 
+
 const store = createStore(rootReducer, compose(
     applyMiddleware(
         thunk,
     ),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 ))
+
 
 const app = (
   <Provider store={store}>
     <SnackbarProvider maxSnack={3}>
-    <App/>
+      <App/>
     </SnackbarProvider>
   </Provider>
 )

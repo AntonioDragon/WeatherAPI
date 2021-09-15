@@ -26,11 +26,12 @@ export const favoritesReducer = (state = initialState, action) => {
     case DELETE_FAVORITE_CITY: {
       state.favorites.splice(state.favorites.indexOf(action.payload), 1)
       return {...state, favorites: state.favorites}
-    } 
-    case CITY_OPEN_FAVORITE: 
+    }
+    case CITY_OPEN_FAVORITE:
       return {...state, cityOpenFavorite: true}
-    case CITY_OPEN_NOT_FAVORITE: 
-      return {...state, cityOpenFavorite: false}  
-    default: return state
+    case CITY_OPEN_NOT_FAVORITE:
+      return {...state, cityOpenFavorite: false}
+    default:
+      return state
   }
 }

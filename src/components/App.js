@@ -1,15 +1,15 @@
 import React, {useEffect} from 'react'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Drawer from '@material-ui/core/Drawer'
-import Hidden from '@material-ui/core/Hidden'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import { useSnackbar } from 'notistack'
-import { useDispatch, useSelector } from 'react-redux'
+import {Hidden, Drawer, CssBaseline} from '@material-ui/core'
+import {makeStyles, useTheme} from '@material-ui/core/styles'
+import {useSnackbar} from 'notistack'
+import {useDispatch, useSelector} from 'react-redux'
 import {hideAlert, hideDrawer, loadFavoriteCities} from '../redux/actions'
 import NavBar from './NavBar'
 import BlockFavorites from './BlockFavorites'
 import addToSessionStorage from '../helpers/addToSessionStorage'
 import AppContent from './AppContent'
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import HomeContent from './HomeContent'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,42 +37,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function ResponsiveDrawer() {
+const ResponsiveDrawer = () => {
   const classes = useStyles()
   const theme = useTheme()
   const dispatch = useDispatch()
-  const {alert, drawer} = useSelector(state => state.app)
-  const {favorites} = useSelector(state => state.favorites)
-  const {enqueueSnackbar} = useSnackbar()
+  const {alert, drawer} = useSelector((state) => state.app)
+  const {favorites} = useSelector((state) => state.favorites)
+  const {enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
-       if(sessionStorage.hasOwnProperty('ArrayFavorite')){
-         dispatch(loadFavoriteCities(JSON.parse(sessionStorage.getItem('ArrayFavorite'))))
-       }
-     }, [])
+    if (sessionStorage.hasOwnProperty('ArrayFavorite')) {
+      dispatch(
+        loadFavoriteCities(JSON.parse(sessionStorage.getItem('ArrayFavorite')))
+      )
+    }
+  }, [])
 
   useEffect(() => {
-    if(alert !== 'Missing')
-      enqueueSnackbar(`${alert}! Please try to double-check the entered city`, {variant: 'warning'})
+    if (alert !== 'Missing')
+      enqueueSnackbar(`${alert}! Please try to double-check the entered city`, {
+        variant: 'warning',
+      })
     return () => dispatch(hideAlert())
   }, [alert])
 
   useEffect(() => {
-    if(favorites.length !== 0)
-      addToSessionStorage(favorites)
+    if (favorites.length !== 0) addToSessionStorage(favorites)
   }, [favorites])
 
   return (
-    <>
+    <Router>
       <CssBaseline />
-      <NavBar/>
+      <NavBar />
       <nav className={classes.drawer} aria-label='favorites city'>
         <Hidden smUp implementation='css'>
           <Drawer
             variant='temporary'
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={drawer}
-            onClose={()=>dispatch(hideDrawer())}
+            onClose={() => dispatch(hideDrawer())}
             classes={{
               paper: classes.drawerPaper,
             }}
@@ -80,7 +83,7 @@ function ResponsiveDrawer() {
               keepMounted: true,
             }}
           >
-           <BlockFavorites/>
+            <BlockFavorites />
           </Drawer>
         </Hidden>
         <Hidden xsDown implementation='css'>
@@ -91,12 +94,15 @@ function ResponsiveDrawer() {
             variant='permanent'
             open
           >
-            <BlockFavorites/>
+            <BlockFavorites />
           </Drawer>
         </Hidden>
       </nav>
-      <AppContent/>
-    </>
+      <Switch>
+        <Route exact path='/' component={HomeContent} />
+        <Route path='/:name' component={AppContent} />
+      </Switch>
+    </Router>
   )
 }
 

@@ -1,4 +1,4 @@
-const useDaysWeek = () =>{
+const useDaysWeek = () => {
   const DaysWeek = {
     arrDaysWeek: [
       'Monday',
@@ -9,15 +9,7 @@ const useDaysWeek = () =>{
       'Saturday',
       'Sunday',
     ],
-    arrDaysWeekMin: [
-      'Mon.',
-      'Tue.',
-      'Wed.',
-      'Thu.',
-      'Fri.',
-      'Sat.',
-      'Sun.',
-    ],
+    arrDaysWeekMin: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
   }
   return DaysWeek
 }

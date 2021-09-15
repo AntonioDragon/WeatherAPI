@@ -7,13 +7,19 @@ import CreateIcon from '@material-ui/icons/Create'
 import DeleteIcon from '@material-ui/icons/Delete'
 import FormDialog from './FormDialog'
 import {useDispatch, useSelector} from 'react-redux'
-import {deleteFavoriteCity, fetchWeather, hideDrawer, openCityFavorite, openCityNotFavorite} from '../redux/actions'
+import {
+  deleteFavoriteCity,
+  openCityFavorite,
+  openCityNotFavorite,
+} from '../redux/actions'
+import {useHistory} from 'react-router'
+import transformCity from '../helpers/transformCity'
 
-const useStyles = makeStyles((theme) =>({
+const useStyles = makeStyles((theme) => ({
   root: {
-      maxWidth: 200,
-      marginRight: 10,
-      marginTop: 5,
+    maxWidth: 200,
+    marginRight: 10,
+    marginTop: 5,
   },
   buttonFavorites: {
     width: 200,
@@ -30,33 +36,28 @@ const useStyles = makeStyles((theme) =>({
       display: 'block',
     },
   },
-}));
+}))
 
 const CardFavorites = (props) => {
   const classes = useStyles()
   const [openFormDialog, setOpenFormDialog] = useState(false)
   const dispatch = useDispatch()
-  const favorites = useSelector(state => state.favorites.favorites)
-  const city = useSelector(state => state.weather.weather.city)
-  const {value, id} = props
+  const favorites = useSelector((state) => state.favorites.favorites)
+  const city = useSelector((state) => state.weather.weather.city)
+  const history = useHistory()
+  const { value, id } = props
 
-  const favoriteOpenAddCity = useCallback(
-      () => {
-        dispatch(hideDrawer())
-        dispatch(fetchWeather(value, favorites))
-      },
-      [value, dispatch, favorites],
-  )
+  const favoriteOpenAddCity = useCallback(() => {
+    const transcriptCity = transformCity(value)
+    history.push(`${transcriptCity}`, value)
+  }, [value])
 
-  const favoriteDeleteCity = useCallback(
-      () => {
-        dispatch(deleteFavoriteCity(value))
-        if(city !== 'Missing' && favorites.find((value)=> value === city))
-         dispatch(openCityFavorite())
-        else dispatch(openCityNotFavorite())
-      },
-      [value, city, favorites],
-  )
+  const favoriteDeleteCity = useCallback(() => {
+    dispatch(deleteFavoriteCity(value))
+    if (city !== 'Missing' && favorites.find((value) => value === city))
+      dispatch(openCityFavorite())
+    else dispatch(openCityNotFavorite())
+  }, [value, city, favorites])
 
   return (
     <Card className={classes.root}>
@@ -74,9 +75,11 @@ const CardFavorites = (props) => {
         >
           {value}
         </Button>
-        <CreateIcon onClick={() => setOpenFormDialog(true)}
-          className={classes.iconCard}/>
-        <DeleteIcon onClick={favoriteDeleteCity}/>
+        <CreateIcon
+          onClick={() => setOpenFormDialog(true)}
+          className={classes.iconCard}
+        />
+        <DeleteIcon onClick={favoriteDeleteCity} />
       </CardActions>
     </Card>
   )

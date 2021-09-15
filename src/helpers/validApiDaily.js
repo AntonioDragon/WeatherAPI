@@ -1,22 +1,20 @@
-import daysWeekCheck from "./daysWeekCheck"
-import iconsWeather from "./iconsWeather"
+import daysWeekCheck from './daysWeekCheck'
+import iconsWeather from './iconsWeather'
 
-const validApiDaily = async (city) =>{
+const validApiDaily = async (city) => {
   const urlkey = process.env.REACT_APP_WEATHER_KEY
   const daysArr = daysWeekCheck()
-  const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?appid=${urlkey}&q=${city}&cnt=7&units=metric`)
-    .then((value) => {
-      return value.json()
-    })
-  
+  const res = await fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?appid=${urlkey}&q=${city}&cnt=7&units=metric`
+  ).then((value) => {
+    return value.json()
+  })
+
   const {
-    list, 
+    list,
     city: {
-      coord: {
-        lat,
-        lon
-      }, 
-    }, 
+      coord: {lat, lon},
+    },
   } = res
 
   const weatherDaily = {
@@ -24,23 +22,14 @@ const validApiDaily = async (city) =>{
       lat,
       lon,
     },
-    daily: list.map((item, index)=>{
+    daily: list.map((item, index) => {
       const {
-        main: {
-          temp_min,
-          temp_max,
-        },
-        wind: {
-          speed
-        },
+        main: {temp_min, temp_max},
+        wind: {speed},
         pop,
-        weather: [
-          {
-            id: weatherId,
-          },
-        ],
+        weather: [{id: weatherId}],
       } = item
-
+   
       return {
         temp: {
           min: temp_min,
@@ -49,11 +38,14 @@ const validApiDaily = async (city) =>{
         wind_speed: speed,
         pop,
         weatherId,
-        dayWeek: daysArr[index]
+        dayWeek: daysArr[index],
       }
-    })
+    }),
   }
-  return {coord: weatherDaily.coord, daily: iconsWeather(weatherDaily.daily, false)}
+  return {
+    coord: weatherDaily.coord,
+    daily: iconsWeather(weatherDaily.daily, false),
+  }
 }
 
 export default validApiDaily
