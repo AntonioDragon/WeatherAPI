@@ -13,7 +13,7 @@ import {useDispatch} from 'react-redux'
 import useWindowDimensions from '../helpers/getWindowDimensions'
 import MenuIcon from '@material-ui/icons/Menu'
 import {useSnackbar} from 'notistack'
-import {useHistory} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import transformCity from '../helpers/transformCity'
 
 const useStyles = makeStyles((theme) => ({
@@ -26,11 +26,14 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     display: 'flex',
-    '&:hover': {
-      borderRadius: 0,
-    },
+    alignItems: 'Center',
+    textDecoration: 'none',
+    color: 'White',
   },
-
+  logo_icon: {
+    textAlign: 'Center',
+    marginRight: 5,
+  },
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -107,21 +110,14 @@ const NavBar = () => {
         >
           <MenuIcon fontSize='large' />
         </IconButton>
-        <IconButton
-          edge='start'
-          className={classes.logo}
-          color='inherit'
-          aria-label='open drawer'
-          style={{ backgroundColor: 'transparent' }}
-          href={`/`}
-        >
-          <WbSunnyIcon />
+        <Link to='/' className={classes.logo}>
+          <WbSunnyIcon  className={classes.logo_icon}/>
           {width > 600 && (
             <Typography className={classes.title} variant='h6' noWrap>
               Weather
             </Typography>
           )}
-        </IconButton>
+        </Link>
         <form onSubmit={submitHandler} className={classes.formSumbit}>
           <div className={classes.search}>
             <div className={classes.searchIcon}>

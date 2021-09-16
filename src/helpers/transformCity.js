@@ -63,15 +63,16 @@ const transformCity = (city) => {
     ['э', 'e'],
     ['ю', 'yu'],
     ['я', 'ya'],
-    [`"`, `"`],
     [`'`, `'`],
+    [`"`, `"`],
     ['і', 'i'],
   ])
   const transcriptCity = []
-  for (const charCity of city)
+  for (const charCity of city) {
     for (const elementMap of translateChar.keys())
-      if (charCity === elementMap)
-        transcriptCity.push(translateChar.get(elementMap))
+      if (charCity === elementMap)  transcriptCity.push(translateChar.get(elementMap))
+  }
+  if(transcriptCity.join('') === '') return city
   return transcriptCity.join('')
 }
 

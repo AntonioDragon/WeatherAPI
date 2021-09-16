@@ -23,14 +23,12 @@ export const fetchWeather = (city) => {
   return async (dispatch) => {
     try {
       dispatch(showLoader())
-      const transriptCity = transformCity(city)
       const fetchObj = {
         city: city,
         weatherDaily: [],
         weatherHourly: [],
       }
-
-      const { daily, coord } = await validApiDaily(transriptCity)
+      const { daily, coord } = await validApiDaily(transformCity(city))
       fetchObj.weatherDaily = daily
       fetchObj.weatherHourly = await validApiHour(coord)
       dispatch({

@@ -11,10 +11,11 @@ import {
   openCityFavorite,
   openCityNotFavorite,
 } from '../redux/actions'
+import {useLocation} from 'react-router'
 import ListWeather from './List'
 import BlockCards from './BlockCards'
 import BlockRadio from './BlockRadio'
-import {useLocation} from 'react-router'
+
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -50,7 +51,10 @@ const AppContent = () => {
   )
 
   useEffect(() => {
-    dispatch(fetchWeather(location.state, favorites))
+    if(location.state)
+      dispatch(fetchWeather(location.state, favorites))
+    else
+      dispatch(fetchWeather(location.pathname.slice(1), favorites))
   }, [location])
 
   useEffect(() => {
