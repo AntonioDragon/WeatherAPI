@@ -7,9 +7,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import WavesIcon from '@material-ui/icons/Waves'
 import OpacityIcon from '@material-ui/icons/Opacity'
 import {CardMedia} from '@material-ui/core'
-import useWindowDimensions from '../helpers/getWindowDimensions'
-import useDaysWeek from '../helpers/daysWeek'
 import {useSelector} from 'react-redux'
+import useDaysWeek from '../helpers/daysWeek'
+import useWindowDimensions from '../helpers/getWindowDimensions'
 
 const useStyles = makeStyles((theme) => ({
   list: {

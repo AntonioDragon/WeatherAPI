@@ -4,12 +4,12 @@ import {makeStyles, useTheme} from '@material-ui/core/styles'
 import {useSnackbar} from 'notistack'
 import {useDispatch, useSelector} from 'react-redux'
 import {hideAlert, hideDrawer, loadFavoriteCities} from '../redux/actions'
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import NavBar from './NavBar'
 import BlockFavorites from './BlockFavorites'
-import addToSessionStorage from '../helpers/addToSessionStorage'
 import AppContent from './AppContent'
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import HomeContent from './HomeContent'
+import addToSessionStorage from '../helpers/addToSessionStorage'
 
 const useStyles = makeStyles((theme) => ({
   root: {

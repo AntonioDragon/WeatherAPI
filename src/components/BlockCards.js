@@ -1,8 +1,8 @@
 import React from 'react'
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
-import CardWeather from './CardWeather'
 import {useSelector}from 'react-redux'
+import CardWeather from './CardWeather'
 
 const responsive = {
   superLargeDesktop: {

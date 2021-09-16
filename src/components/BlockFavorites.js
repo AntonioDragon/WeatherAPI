@@ -1,9 +1,9 @@
 import React from 'react'
-import CardFavorites from './CardFavorites'
-import {useDispatch, useSelector} from 'react-redux'
 import {IconButton, makeStyles, Paper} from '@material-ui/core'
-import {hideDrawer} from '../redux/actions'
 import CloseIcon from '@material-ui/icons/Close'
+import {hideDrawer} from '../redux/actions'
+import {useDispatch, useSelector} from 'react-redux'
+import CardFavorites from './CardFavorites'
 
 const useStyles = makeStyles((theme) => ({
   headerDrawer: {

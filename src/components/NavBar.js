@@ -8,13 +8,14 @@ import SearchIcon from '@material-ui/icons/Search'
 import SendIcon from '@material-ui/icons/Send'
 import WbSunnyIcon from '@material-ui/icons/WbSunny'
 import {Button, IconButton} from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
 import {showDrawer} from '../redux/actions'
 import {useDispatch} from 'react-redux'
-import useWindowDimensions from '../helpers/getWindowDimensions'
-import MenuIcon from '@material-ui/icons/Menu'
-import {useSnackbar} from 'notistack'
 import {Link, useHistory} from 'react-router-dom'
+import {useSnackbar} from 'notistack'
+
 import transformCity from '../helpers/transformCity'
+import useWindowDimensions from '../helpers/getWindowDimensions'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {

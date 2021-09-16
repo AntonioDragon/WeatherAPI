@@ -5,7 +5,6 @@ import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import CreateIcon from '@material-ui/icons/Create'
 import DeleteIcon from '@material-ui/icons/Delete'
-import FormDialog from './FormDialog'
 import {useDispatch, useSelector} from 'react-redux'
 import {
   deleteFavoriteCity,
@@ -14,6 +13,7 @@ import {
 } from '../redux/actions'
 import {useHistory} from 'react-router'
 import transformCity from '../helpers/transformCity'
+import FormDialog from './FormDialog'
 
 const useStyles = makeStyles((theme) => ({
   root: {

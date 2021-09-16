@@ -1,5 +1,5 @@
-import {makeStyles, Switch} from '@material-ui/core'
 import React, {useCallback, useState} from 'react'
+import {makeStyles, Switch} from '@material-ui/core'
 import {useDispatch } from 'react-redux'
 import {
   metricStateToFahrenheit,
