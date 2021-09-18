@@ -4,7 +4,7 @@ import {makeStyles, useTheme} from '@material-ui/core/styles'
 import {useSnackbar} from 'notistack'
 import {useDispatch, useSelector} from 'react-redux'
 import {hideAlert, hideDrawer, loadFavoriteCities} from '../redux/actions'
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import NavBar from './NavBar'
 import BlockFavorites from './BlockFavorites'
 import AppContent from './AppContent'
@@ -100,7 +100,9 @@ const ResponsiveDrawer = () => {
       </nav>
       <Switch>
         <Route exact path='/' component={HomeContent} />
-        <Route path='/:name' component={AppContent} />
+        <Route path='/:name'>
+          {alert !== 'Missing' ? <Redirect to="/" /> : <AppContent/>}
+        </Route> 
       </Switch>
     </Router>
   )
