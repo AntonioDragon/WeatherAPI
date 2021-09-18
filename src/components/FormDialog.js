@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {
   changeFavoriteCity,
   openCityFavorite,
-  openCityNotFavorite,
+  openCityNotFavorite
 } from '../redux/actions'
 
 const FormDialog = (props) => {
@@ -21,7 +21,8 @@ const FormDialog = (props) => {
   const city = useSelector((state) => state.weather.weather.city)
 
   const enterCity = useCallback(() => {
-    dispatch(changeFavoriteCity(idCardFavorite, newFavorite))
+    let transformNewFavorite = newFavorite.toLowerCase()
+    dispatch(changeFavoriteCity(idCardFavorite, transformNewFavorite))
     if (city !== 'Missing' && favorites.find((value) => value === city))
       dispatch(openCityFavorite())
     else dispatch(openCityNotFavorite())

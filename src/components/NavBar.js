@@ -19,21 +19,21 @@ import useWindowDimensions from '../helpers/getWindowDimensions'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+    zIndex: theme.zIndex.drawer + 1
   },
   navbar: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   logo: {
     display: 'flex',
     alignItems: 'Center',
     textDecoration: 'none',
-    color: 'White',
+    color: 'White'
   },
   logo_icon: {
     textAlign: 'Center',
-    marginRight: 5,
+    marginRight: 5
   },
   search: {
     position: 'relative',
@@ -42,12 +42,12 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 5,
     width: '100%',
     '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.25)
     },
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
+      width: 'auto'
+    }
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -56,10 +56,10 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   inputRoot: {
-    color: 'inherit',
+    color: 'inherit'
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -69,18 +69,18 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: '12ch',
       '&:focus': {
-        width: '20ch',
-      },
-    },
+        width: '20ch'
+      }
+    }
   },
   formSumbit: {
-    display: 'flex',
+    display: 'flex'
   },
   menuIcon: {
     [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
+      display: 'none'
+    }
+  }
 }))
 
 const NavBar = () => {
@@ -90,13 +90,14 @@ const NavBar = () => {
   const {width} = useWindowDimensions()
   const {enqueueSnackbar} = useSnackbar()
   const history = useHistory()
+
   const submitHandler = (event) => {
     event.preventDefault()
     if (searchInput.trim().length !== 0) {
       const transcriptCity = transformCity(searchInput)
-      history.push(`${transcriptCity}`, searchInput)
-    } else
-      enqueueSnackbar('The submitted data is empty!', { variant: 'warning' })
+      history.push(`${transcriptCity}`)
+      setSearchInput('')
+    } else enqueueSnackbar('The submitted data is empty!', {variant: 'warning'})
   }
 
   return (
@@ -112,7 +113,7 @@ const NavBar = () => {
           <MenuIcon fontSize='large' />
         </IconButton>
         <Link to='/' className={classes.logo}>
-          <WbSunnyIcon  className={classes.logo_icon}/>
+          <WbSunnyIcon className={classes.logo_icon} />
           {width > 600 && (
             <Typography className={classes.title} variant='h6' noWrap>
               Weather
@@ -128,10 +129,11 @@ const NavBar = () => {
               placeholder='Search City…'
               classes={{
                 root: classes.inputRoot,
-                input: classes.inputInput,
+                input: classes.inputInput
               }}
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={{'aria-label': 'search'}}
               onChange={(e) => setSearchInput(e.target.value)}
+              value={searchInput || ''}
             />
           </div>
           <Button

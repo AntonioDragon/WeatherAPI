@@ -73,7 +73,7 @@ const transformCity = (city) => {
       if (charCity === elementMap)  transcriptCity.push(translateChar.get(elementMap))
   }
   if(transcriptCity.join('') === '') return city
-  return transcriptCity.join('')
+  return transcriptCity.join('').toLowerCase()
 }
 
 export default transformCity

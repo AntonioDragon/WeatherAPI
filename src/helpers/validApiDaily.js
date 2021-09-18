@@ -9,42 +9,45 @@ const validApiDaily = async (city) => {
   ).then((value) => {
     return value.json()
   })
-
+  if (res.cod !== '200')
+    throw new Error(`Api value missing nesting : ${res.message}`)
   const {
     list,
     city: {
       coord: {lat, lon},
+      name,
     },
   } = res
 
   const weatherDaily = {
     coord: {
       lat,
-      lon,
+      lon
     },
     daily: list.map((item, index) => {
       const {
         main: {temp_min, temp_max},
         wind: {speed},
         pop,
-        weather: [{id: weatherId}],
+        weather: [{id: weatherId}]
       } = item
-   
+
       return {
         temp: {
           min: temp_min,
-          max: temp_max,
+          max: temp_max
         },
         wind_speed: speed,
         pop,
         weatherId,
-        dayWeek: daysArr[index],
+        dayWeek: daysArr[index]
       }
-    }),
+    })
   }
   return {
     coord: weatherDaily.coord,
-    daily: iconsWeather(weatherDaily.daily, false),
+    name,
+    daily: iconsWeather(weatherDaily.daily, false)
   }
 }
 

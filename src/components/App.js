@@ -13,28 +13,28 @@ import addToSessionStorage from '../helpers/addToSessionStorage'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: 'flex'
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
       width: 240,
-      flexShrink: 0,
-    },
+      flexShrink: 0
+    }
   },
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: 240,
+    width: 240
   },
   content: {
     flexGrow: 1,
-    padding: 10,
-  },
+    padding: 10
+  }
 }))
 
 const ResponsiveDrawer = () => {
@@ -43,7 +43,7 @@ const ResponsiveDrawer = () => {
   const dispatch = useDispatch()
   const {alert, drawer} = useSelector((state) => state.app)
   const {favorites} = useSelector((state) => state.favorites)
-  const {enqueueSnackbar } = useSnackbar()
+  const {enqueueSnackbar} = useSnackbar()
 
   useEffect(() => {
     if (sessionStorage.hasOwnProperty('ArrayFavorite')) {
@@ -56,7 +56,7 @@ const ResponsiveDrawer = () => {
   useEffect(() => {
     if (alert !== 'Missing')
       enqueueSnackbar(`${alert}! Please try to double-check the entered city`, {
-        variant: 'warning',
+        variant: 'warning'
       })
     return () => dispatch(hideAlert())
   }, [alert])
@@ -77,10 +77,10 @@ const ResponsiveDrawer = () => {
             open={drawer}
             onClose={() => dispatch(hideDrawer())}
             classes={{
-              paper: classes.drawerPaper,
+              paper: classes.drawerPaper
             }}
             ModalProps={{
-              keepMounted: true,
+              keepMounted: true
             }}
           >
             <BlockFavorites />
@@ -89,7 +89,7 @@ const ResponsiveDrawer = () => {
         <Hidden xsDown implementation='css'>
           <Drawer
             classes={{
-              paper: classes.drawerPaper,
+              paper: classes.drawerPaper
             }}
             variant='permanent'
             open

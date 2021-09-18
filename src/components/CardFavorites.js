@@ -14,10 +14,11 @@ import {
 import {useHistory} from 'react-router'
 import transformCity from '../helpers/transformCity'
 import FormDialog from './FormDialog'
+import { IconButton } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 200,
+    maxWidth: 230,
     marginRight: 10,
     marginTop: 5,
   },
@@ -32,9 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   iconCard: {
-    [theme.breakpoints.up('md')]: {
-      display: 'block',
-    },
+    padding: 5,
   },
 }))
 
@@ -75,11 +74,24 @@ const CardFavorites = (props) => {
         >
           {value}
         </Button>
-        <CreateIcon
-          onClick={() => setOpenFormDialog(true)}
+        <IconButton
+          edge='start'
           className={classes.iconCard}
-        />
-        <DeleteIcon onClick={favoriteDeleteCity} />
+          color='inherit'
+          aria-label='open drawer'
+          onClick={() => setOpenFormDialog(true)}
+        >
+          <CreateIcon/>
+        </IconButton>
+        <IconButton
+          edge='start'
+          className={classes.iconCard}
+          color='inherit'
+          aria-label='open drawer'
+          onClick={() => favoriteDeleteCity()}
+        >
+          <DeleteIcon/>
+        </IconButton>
       </CardActions>
     </Card>
   )

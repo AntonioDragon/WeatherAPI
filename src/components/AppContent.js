@@ -11,7 +11,7 @@ import {
   openCityFavorite,
   openCityNotFavorite,
 } from '../redux/actions'
-import {useLocation} from 'react-router'
+import {useParams} from 'react-router'
 import ListWeather from './List'
 import BlockCards from './BlockCards'
 import BlockRadio from './BlockRadio'
@@ -43,32 +43,28 @@ const useStyles = makeStyles((theme) => ({
 const AppContent = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const location = useLocation()
+  const {name} = useParams()
   const {loading} = useSelector((state) => state.app)
   const city = useSelector((state) => state.weather.weather.city)
   const {cityOpenFavorite, favorites } = useSelector(
     (state) => state.favorites
   )
+  useEffect(() => {
+    dispatch(fetchWeather(name, favorites))
+  }, [name])
 
   useEffect(() => {
-    if(location.state)
-      dispatch(fetchWeather(location.state, favorites))
-    else
-      dispatch(fetchWeather(location.pathname.slice(1), favorites))
-  }, [location])
-
-  useEffect(() => {
-    if (favorites.find((value) => value === location.state))
+    if (favorites.find((value) => value === city.toLowerCase()))
       dispatch(openCityFavorite())
     else dispatch(openCityNotFavorite())
   }, [favorites, city])
 
   const favoriteToggleClick = useCallback(() => {
     if (cityOpenFavorite) {
-      dispatch(deleteFavoriteCity(city, favorites))
+      dispatch(deleteFavoriteCity(city.toLowerCase()))
       dispatch(openCityNotFavorite())
     } else {
-      dispatch(addFavoriteCity(city))
+      dispatch(addFavoriteCity(city.toLowerCase()))
       dispatch(openCityFavorite())
     }
   }, [cityOpenFavorite, city, favorites])

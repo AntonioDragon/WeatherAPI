@@ -6,6 +6,9 @@ import {useDispatch, useSelector} from 'react-redux'
 import CardFavorites from './CardFavorites'
 
 const useStyles = makeStyles((theme) => ({
+  title:{
+    marginLeft: 5,
+  },
   headerDrawer: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -27,7 +30,7 @@ const BlockFavorites = () => {
   return (
     <>
       <div className={clasess.headerDrawer}>
-        <h2>Favorite city</h2>
+        <h2 className={clasess.title}>Favorite city</h2>
         <IconButton
           edge='start'
           color='inherit'

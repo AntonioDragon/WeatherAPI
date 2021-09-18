@@ -14,7 +14,7 @@ import {
   CITY_OPEN_NOT_FAVORITE,
   SHOW_DRAWER,
   HIDE_DRAWER,
-  LOADING_FAVORITE_CITY,
+  LOADING_FAVORITE_CITY
 } from './types'
 import validApiDaily from '../helpers/validApiDaily'
 import validApiHour from '../helpers/validApiHour'
@@ -23,17 +23,16 @@ export const fetchWeather = (city) => {
   return async (dispatch) => {
     try {
       dispatch(showLoader())
+      const {daily, coord, name} = await validApiDaily(transformCity(city))
       const fetchObj = {
-        city: city,
-        weatherDaily: [],
-        weatherHourly: [],
+        city: name,
+        weatherDaily: daily,
+        weatherHourly: []
       }
-      const { daily, coord } = await validApiDaily(transformCity(city))
-      fetchObj.weatherDaily = daily
       fetchObj.weatherHourly = await validApiHour(coord)
       dispatch({
         type: FETCH_WEATHER,
-        payload: fetchObj,
+        payload: fetchObj
       })
       dispatch(hideLoader())
     } catch (error) {
@@ -48,18 +47,18 @@ export const metricStateToCelsius = () => ({type: TRANSFORM_C_WEATHER})
 
 export const addFavoriteCity = (element) => ({
   type: ADD_FAVORITE_CITY,
-  payload: element,
+  payload: element
 })
 export const changeFavoriteCity = (index, element) => {
-  return {type: CHANGE_FAVORITE_CITY, payload: {index, element} }
+  return {type: CHANGE_FAVORITE_CITY, payload: {index, element}}
 }
 export const deleteFavoriteCity = (city) => ({
   type: DELETE_FAVORITE_CITY,
-  payload: city,
+  payload: city
 })
 export const loadFavoriteCities = (post) => ({
   type: LOADING_FAVORITE_CITY,
-  payload: post,
+  payload: post
 })
 
 export const showDrawer = () => ({type: SHOW_DRAWER})
@@ -75,10 +74,16 @@ export const showAlert = (errText) => {
   return (dispatch) => {
     dispatch({
       type: SHOW_ALERT,
-      payload: errText,
+      payload: errText
     })
     dispatch(hideLoader())
-    setTimeout(() => dispatch(hideAlert()), 3000)
+    setTimeout(() => {
+      dispatch({
+        type: SHOW_ALERT,
+        payload: 'Missing'
+      })
+      dispatch(hideAlert())
+    }, 3000)
   }
 }
 export const hideAlert = () => ({type: HIDE_ALERT})

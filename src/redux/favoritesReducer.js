@@ -8,7 +8,7 @@ import {
 } from './types'
 
 const initialState = {
-  favorites: ['Лондон', 'Запорожье'],
+  favorites: ['london', 'zaporozhe'],
   cityOpenFavorite: false,
 }
 
