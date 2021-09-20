@@ -1,5 +1,6 @@
 import {
   ADD_FAVORITE_CITY,
+  CHANGE_CITY_OPEN_FAVORITE,
   CHANGE_FAVORITE_CITY,
   CITY_OPEN_FAVORITE,
   CITY_OPEN_NOT_FAVORITE,
@@ -31,6 +32,12 @@ export const favoritesReducer = (state = initialState, action) => {
       return {...state, cityOpenFavorite: true}
     case CITY_OPEN_NOT_FAVORITE:
       return {...state, cityOpenFavorite: false}
+    case CHANGE_CITY_OPEN_FAVORITE: {
+      let answer = undefined
+      if (state.favorites.find((value) => value === action.payload.toLowerCase())) answer = true
+      return {...state, cityOpenFavorite: answer}
+    }
+     
     default:
       return state
   }

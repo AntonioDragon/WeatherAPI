@@ -2,7 +2,7 @@ import {FETCH_WEATHER, TRANSFORM_C_WEATHER, TRANSFORM_F_WEATHER} from './types'
 
 const initialState = {
   weather: {
-    city: 'Missing',
+    city: '',
     weatherDaily: [],
     weatherHourly: [],
   },

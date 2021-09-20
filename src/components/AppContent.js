@@ -9,13 +9,12 @@ import {
   deleteFavoriteCity,
   fetchWeather,
   openCityFavorite,
-  openCityNotFavorite,
+  openCityNotFavorite
 } from '../redux/actions'
 import {useParams} from 'react-router'
 import ListWeather from './List'
 import BlockCards from './BlockCards'
 import BlockRadio from './BlockRadio'
-
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -23,21 +22,21 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 30,
     marginTop: 50,
     [theme.breakpoints.up('sm')]: {
-      marginLeft: 10,
-    },
+      marginLeft: 10
+    }
   },
   weatherBlock: {
     marginLeft: 0,
     [theme.breakpoints.up('sm')]: {
-      marginLeft: 250,
-    },
+      marginLeft: 250
+    }
   },
   loading: {
     position: 'absolute',
     left: '50%',
-    top: '50%',
+    top: '50%'
   },
-  favorite: {},
+  favorite: {}
 }))
 
 const AppContent = () => {
@@ -46,18 +45,11 @@ const AppContent = () => {
   const {name} = useParams()
   const {loading} = useSelector((state) => state.app)
   const city = useSelector((state) => state.weather.weather.city)
-  const {cityOpenFavorite, favorites } = useSelector(
-    (state) => state.favorites
-  )
+  const {cityOpenFavorite, favorites} = useSelector((state) => state.favorites)
   useEffect(() => {
     dispatch(fetchWeather(name, favorites))
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name])
-
-  useEffect(() => {
-    if (favorites.find((value) => value === city.toLowerCase()))
-      dispatch(openCityFavorite())
-    else dispatch(openCityNotFavorite())
-  }, [favorites, city])
 
   const favoriteToggleClick = useCallback(() => {
     if (cityOpenFavorite) {
@@ -67,6 +59,7 @@ const AppContent = () => {
       dispatch(addFavoriteCity(city.toLowerCase()))
       dispatch(openCityFavorite())
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityOpenFavorite, city, favorites])
 
   return (
@@ -74,7 +67,7 @@ const AppContent = () => {
       {loading ? (
         <CircularProgress className={classes.loading} />
       ) : (
-        city !== 'Missing' && (
+        city && (
           <>
             <div className={classes.title}>
               <h1>{city}</h1>
@@ -83,7 +76,7 @@ const AppContent = () => {
                 className={classes.menuIcon}
                 color='inherit'
                 aria-label='open drawer'
-                style={{backgroundColor: 'transparent' }}
+                style={{backgroundColor: 'transparent'}}
                 onClick={favoriteToggleClick}
               >
                 {cityOpenFavorite ? <StarIcon /> : <StarBorderIcon />}

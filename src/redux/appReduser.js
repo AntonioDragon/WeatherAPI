@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   loading: false,
-  alert: 'Missing',
+  alert: '',
   drawer: false,
 }
 

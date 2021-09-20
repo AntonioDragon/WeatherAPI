@@ -25,6 +25,7 @@ const BlockRadio = () => {
       dispatch(metricStateToFahrenheit())
       setSelectedValue(true)
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValue])
   
   return (

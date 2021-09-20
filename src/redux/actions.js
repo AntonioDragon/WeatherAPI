@@ -14,7 +14,8 @@ import {
   CITY_OPEN_NOT_FAVORITE,
   SHOW_DRAWER,
   HIDE_DRAWER,
-  LOADING_FAVORITE_CITY
+  LOADING_FAVORITE_CITY,
+  CHANGE_CITY_OPEN_FAVORITE
 } from './types'
 import validApiDaily from '../helpers/validApiDaily'
 import validApiHour from '../helpers/validApiHour'
@@ -34,6 +35,7 @@ export const fetchWeather = (city) => {
         type: FETCH_WEATHER,
         payload: fetchObj
       })
+      dispatch(checkOpenCityFavorite(name))
       dispatch(hideLoader())
     } catch (error) {
       dispatch(hideLoader())
@@ -66,6 +68,8 @@ export const hideDrawer = () => ({type: HIDE_DRAWER})
 
 export const showLoader = () => ({type: SHOW_LOADER})
 export const hideLoader = () => ({type: HIDE_LOADER})
+
+export const checkOpenCityFavorite = (city) => ({type: CHANGE_CITY_OPEN_FAVORITE, payload: city})
 
 export const openCityFavorite = () => ({type: CITY_OPEN_FAVORITE})
 export const openCityNotFavorite = () => ({type: CITY_OPEN_NOT_FAVORITE})

@@ -51,6 +51,7 @@ const ResponsiveDrawer = () => {
         loadFavoriteCities(JSON.parse(sessionStorage.getItem('ArrayFavorite')))
       )
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -59,6 +60,7 @@ const ResponsiveDrawer = () => {
         variant: 'warning'
       })
     return () => dispatch(hideAlert())
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alert])
 
   useEffect(() => {
@@ -101,7 +103,7 @@ const ResponsiveDrawer = () => {
       <Switch>
         <Route exact path='/' component={HomeContent} />
         <Route path='/:name'>
-          {alert !== 'Missing' ? <Redirect to="/" /> : <AppContent/>}
+          {alert ? <Redirect to="/" /> : <AppContent/>}
         </Route> 
       </Switch>
     </Router>

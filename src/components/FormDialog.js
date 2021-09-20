@@ -27,6 +27,7 @@ const FormDialog = (props) => {
       dispatch(openCityFavorite())
     else dispatch(openCityNotFavorite())
     setOpenFormDialog(false)
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idCardFavorite, setOpenFormDialog, newFavorite, city, favorites])
 
   return (

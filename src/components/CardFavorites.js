@@ -49,13 +49,14 @@ const CardFavorites = (props) => {
   const favoriteOpenAddCity = useCallback(() => {
     const transcriptCity = transformCity(value)
     history.push(`${transcriptCity}`, value)
-  }, [value])
-
+  }, [value, history])
+  
   const favoriteDeleteCity = useCallback(() => {
     dispatch(deleteFavoriteCity(value))
     if (city !== 'Missing' && favorites.find((value) => value === city))
       dispatch(openCityFavorite())
     else dispatch(openCityNotFavorite())
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, city, favorites])
 
   return (
