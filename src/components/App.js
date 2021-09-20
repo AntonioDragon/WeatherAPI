@@ -4,7 +4,12 @@ import {makeStyles, useTheme} from '@material-ui/core/styles'
 import {useSnackbar} from 'notistack'
 import {useDispatch, useSelector} from 'react-redux'
 import {hideAlert, hideDrawer, loadFavoriteCities} from '../redux/actions'
-import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom'
 import NavBar from './NavBar'
 import BlockFavorites from './BlockFavorites'
 import AppContent from './AppContent'
@@ -55,7 +60,7 @@ const ResponsiveDrawer = () => {
   }, [])
 
   useEffect(() => {
-    if (alert !== 'Missing')
+    if (alert)
       enqueueSnackbar(`${alert}! Please try to double-check the entered city`, {
         variant: 'warning'
       })
@@ -103,8 +108,8 @@ const ResponsiveDrawer = () => {
       <Switch>
         <Route exact path='/' component={HomeContent} />
         <Route path='/:name'>
-          {alert ? <Redirect to="/" /> : <AppContent/>}
-        </Route> 
+          {alert ? <Redirect to='/' /> : <AppContent />}
+        </Route>
       </Switch>
     </Router>
   )

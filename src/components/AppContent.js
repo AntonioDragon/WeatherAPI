@@ -6,6 +6,7 @@ import {CircularProgress, IconButton, Paper} from '@material-ui/core'
 import {useDispatch, useSelector} from 'react-redux'
 import {
   addFavoriteCity,
+  checkOpenCityFavorite,
   deleteFavoriteCity,
   fetchWeather,
   openCityFavorite,
@@ -45,9 +46,10 @@ const AppContent = () => {
   const {name} = useParams()
   const {loading} = useSelector((state) => state.app)
   const city = useSelector((state) => state.weather.weather.city)
-  const {cityOpenFavorite, favorites} = useSelector((state) => state.favorites)
+  const {cityOpenFavorite} = useSelector((state) => state.favorites)
   useEffect(() => {
-    dispatch(fetchWeather(name, favorites))
+    dispatch(fetchWeather(name))
+    dispatch(checkOpenCityFavorite(name))
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name])
 
@@ -60,7 +62,7 @@ const AppContent = () => {
       dispatch(openCityFavorite())
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cityOpenFavorite, city, favorites])
+  }, [cityOpenFavorite, city])
 
   return (
     <div className={classes.weatherBlock}>

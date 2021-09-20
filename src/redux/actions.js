@@ -35,7 +35,6 @@ export const fetchWeather = (city) => {
         type: FETCH_WEATHER,
         payload: fetchObj
       })
-      dispatch(checkOpenCityFavorite(name))
       dispatch(hideLoader())
     } catch (error) {
       dispatch(hideLoader())
@@ -84,7 +83,7 @@ export const showAlert = (errText) => {
     setTimeout(() => {
       dispatch({
         type: SHOW_ALERT,
-        payload: 'Missing'
+        payload: ''
       })
       dispatch(hideAlert())
     }, 3000)
