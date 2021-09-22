@@ -26,7 +26,7 @@ export const appReduser = (state = initialState, action) => {
     case SHOW_ALERT:
       return {...state, alert: action.payload}
     case HIDE_ALERT:
-      return {...state, alert: 'Missing'}
+      return {...state, alert: ''}
     default:
       return state
   }

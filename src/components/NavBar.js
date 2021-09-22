@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useCallback, useState} from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -91,14 +91,19 @@ const NavBar = () => {
   const {enqueueSnackbar} = useSnackbar()
   const history = useHistory()
 
-  const submitHandler = (event) => {
-    event.preventDefault()
-    if (searchInput.trim().length !== 0) {
-      const transcriptCity = transformCity(searchInput)
-      history.push(`${transcriptCity}`)
-      setSearchInput('')
-    } else enqueueSnackbar('The submitted data is empty!', {variant: 'warning'})
-  }
+  const submitHandler = useCallback(
+    (event) => {
+      event.preventDefault()
+      if (searchInput.trim().length !== 0) {
+        const transcriptCity = transformCity(searchInput)
+        history.push(`${transcriptCity}`)
+        setSearchInput('')
+      } else
+        enqueueSnackbar('The submitted data is empty!', {variant: 'warning'})
+    },
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+    [history, searchInput]
+  )
 
   return (
     <AppBar position='fixed' className={classes.appBar}>
