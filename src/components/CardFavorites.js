@@ -9,32 +9,32 @@ import {useDispatch, useSelector} from 'react-redux'
 import {
   deleteFavoriteCity,
   openCityFavorite,
-  openCityNotFavorite,
+  openCityNotFavorite
 } from '../redux/actions'
-import {useHistory} from 'react-router'
+import {generatePath, useHistory} from 'react-router'
 import transformCity from '../helpers/transformCity'
 import FormDialog from './FormDialog'
-import { IconButton } from '@material-ui/core'
+import {IconButton} from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 230,
     marginRight: 10,
-    marginTop: 5,
+    marginTop: 5
   },
   buttonFavorites: {
     width: 200,
     [theme.breakpoints.up('md')]: {
-      fontSize: 8,
+      fontSize: 8
     },
     [theme.breakpoints.up('sm')]: {
       fontSize: 12,
-      width: 120,
-    },
+      width: 120
+    }
   },
   iconCard: {
-    padding: 5,
-  },
+    padding: 5
+  }
 }))
 
 const CardFavorites = (props) => {
@@ -44,13 +44,12 @@ const CardFavorites = (props) => {
   const favorites = useSelector((state) => state.favorites.favorites)
   const city = useSelector((state) => state.weather.weather.city)
   const history = useHistory()
-  const { value, id } = props
+  const {value, id} = props
 
   const favoriteOpenAddCity = useCallback(() => {
-    const transcriptCity = transformCity(value)
-    history.push(`${transcriptCity}`, value)
+    history.push(generatePath('/:name', {name: transformCity(value)}))
   }, [value, history])
-  
+
   const favoriteDeleteCity = useCallback(() => {
     dispatch(deleteFavoriteCity(value))
     if (city !== 'Missing' && favorites.find((value) => value === city))
@@ -82,7 +81,7 @@ const CardFavorites = (props) => {
           aria-label='open drawer'
           onClick={() => setOpenFormDialog(true)}
         >
-          <CreateIcon/>
+          <CreateIcon />
         </IconButton>
         <IconButton
           edge='start'
@@ -91,7 +90,7 @@ const CardFavorites = (props) => {
           aria-label='open drawer'
           onClick={() => favoriteDeleteCity()}
         >
-          <DeleteIcon/>
+          <DeleteIcon />
         </IconButton>
       </CardActions>
     </Card>

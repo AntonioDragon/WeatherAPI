@@ -12,7 +12,5 @@ export const SHOW_DRAWER = 'APP/SHOW_DRAWER'
 export const HIDE_DRAWER = 'APP/HIDE_DRAWER'
 export const SHOW_LOADER = 'APP/SHOW_LOADER'
 export const HIDE_LOADER = 'APP/HIDE_LOADER'
-export const SHOW_ALERT = 'APP/SHOW_ALERT'
-export const HIDE_ALERT = 'APP/HIDE_ALERT'
 
 

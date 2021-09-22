@@ -1,14 +1,12 @@
 import React, {useEffect} from 'react'
 import {Hidden, Drawer, CssBaseline} from '@material-ui/core'
 import {makeStyles, useTheme} from '@material-ui/core/styles'
-import {useSnackbar} from 'notistack'
 import {useDispatch, useSelector} from 'react-redux'
-import {hideAlert, hideDrawer, loadFavoriteCities} from '../redux/actions'
+import {hideDrawer, loadFavoriteCities} from '../redux/actions'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
 } from 'react-router-dom'
 import NavBar from './NavBar'
 import BlockFavorites from './BlockFavorites'
@@ -46,9 +44,9 @@ const ResponsiveDrawer = () => {
   const classes = useStyles()
   const theme = useTheme()
   const dispatch = useDispatch()
-  const {alert, drawer} = useSelector((state) => state.app)
+  const {drawer} = useSelector((state) => state.app)
   const {favorites} = useSelector((state) => state.favorites)
-  const {enqueueSnackbar} = useSnackbar()
+  
 
   useEffect(() => {
     if (sessionStorage.hasOwnProperty('ArrayFavorite')) {
@@ -58,15 +56,6 @@ const ResponsiveDrawer = () => {
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    if (alert)
-      enqueueSnackbar(`${alert}! Please try to double-check the entered city`, {
-        variant: 'warning'
-      })
-    return () => dispatch(hideAlert())
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [alert])
 
   useEffect(() => {
     if (favorites.length !== 0) addToSessionStorage(favorites)
@@ -107,9 +96,7 @@ const ResponsiveDrawer = () => {
       </nav>
       <Switch>
         <Route exact path='/' component={HomeContent} />
-        <Route path='/:name'>
-          {alert ? <Redirect to='/' /> : <AppContent />}
-        </Route>
+        <Route path='/:name' component={AppContent} />
       </Switch>
     </Router>
   )

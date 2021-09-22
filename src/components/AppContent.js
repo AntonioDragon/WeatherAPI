@@ -12,10 +12,11 @@ import {
   openCityFavorite,
   openCityNotFavorite
 } from '../redux/actions'
-import {useParams} from 'react-router'
+import {useHistory, useParams} from 'react-router'
 import ListWeather from './List'
 import BlockCards from './BlockCards'
 import BlockRadio from './BlockRadio'
+import {useSnackbar} from 'notistack'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -43,12 +44,18 @@ const useStyles = makeStyles((theme) => ({
 const AppContent = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const history = useHistory()
   const {name} = useParams()
+  const {enqueueSnackbar} = useSnackbar()
   const {loading} = useSelector((state) => state.app)
   const city = useSelector((state) => state.weather.weather.city)
   const {cityOpenFavorite} = useSelector((state) => state.favorites)
   useEffect(() => {
     dispatch(fetchWeather(name))
+    .catch((error) => {
+      enqueueSnackbar(`${error.message}! Please try to double-check the entered city`, {variant: 'warning'});
+      history.push('/')
+    })
     dispatch(checkOpenCityFavorite(name))
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name])

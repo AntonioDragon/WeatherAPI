@@ -11,7 +11,7 @@ import {Button, IconButton} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import {showDrawer} from '../redux/actions'
 import {useDispatch} from 'react-redux'
-import {Link, useHistory} from 'react-router-dom'
+import {Link, useHistory, generatePath} from 'react-router-dom'
 import {useSnackbar} from 'notistack'
 
 import transformCity from '../helpers/transformCity'
@@ -95,8 +95,7 @@ const NavBar = () => {
     (event) => {
       event.preventDefault()
       if (searchInput.trim().length !== 0) {
-        const transcriptCity = transformCity(searchInput)
-        history.push(`${transcriptCity}`)
+        history.push(generatePath('/:name', {name: transformCity(searchInput)}))
         setSearchInput('')
       } else
         enqueueSnackbar('The submitted data is empty!', {variant: 'warning'})

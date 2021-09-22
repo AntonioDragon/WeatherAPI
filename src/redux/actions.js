@@ -8,8 +8,6 @@ import {
   DELETE_FAVORITE_CITY,
   HIDE_LOADER,
   SHOW_LOADER,
-  SHOW_ALERT,
-  HIDE_ALERT,
   CITY_OPEN_FAVORITE,
   CITY_OPEN_NOT_FAVORITE,
   SHOW_DRAWER,
@@ -22,7 +20,6 @@ import validApiHour from '../helpers/validApiHour'
 
 export const fetchWeather = (city) => {
   return async (dispatch) => {
-    try {
       dispatch(showLoader())
       const {daily, coord, name} = await validApiDaily(transformCity(city))
       const fetchObj = {
@@ -36,10 +33,6 @@ export const fetchWeather = (city) => {
         payload: fetchObj
       })
       dispatch(hideLoader())
-    } catch (error) {
-      dispatch(hideLoader())
-      dispatch(showAlert(error.message))
-    }
   }
 }
 
@@ -73,20 +66,3 @@ export const checkOpenCityFavorite = (city) => ({type: CHANGE_CITY_OPEN_FAVORITE
 export const openCityFavorite = () => ({type: CITY_OPEN_FAVORITE})
 export const openCityNotFavorite = () => ({type: CITY_OPEN_NOT_FAVORITE})
 
-export const showAlert = (errText) => {
-  return (dispatch) => {
-    dispatch({
-      type: SHOW_ALERT,
-      payload: errText
-    })
-    dispatch(hideLoader())
-    setTimeout(() => {
-      dispatch({
-        type: SHOW_ALERT,
-        payload: ''
-      })
-      dispatch(hideAlert())
-    }, 3000)
-  }
-}
-export const hideAlert = () => ({type: HIDE_ALERT})
